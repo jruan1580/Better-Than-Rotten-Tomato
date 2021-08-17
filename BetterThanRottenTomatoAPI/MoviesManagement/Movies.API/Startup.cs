@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Movies.Domain.Mapper;
 
 namespace Movies.API
 {
@@ -26,6 +27,8 @@ namespace Movies.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddAutoMapper(typeof(MappingProfile));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
