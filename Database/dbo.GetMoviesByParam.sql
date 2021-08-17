@@ -17,12 +17,12 @@ as
 begin
 	
 	set nocount on;
-	declare @genreIds table
+	declare @genreIdsSelected table
 	(
 		Id int
 	);
 
-	insert into @genreIds
+	insert into @genreIdsSelected
 	select
 		genre.Id
 	from [dbo].[MovieGenre] genre
@@ -30,18 +30,35 @@ begin
 			on genre.Genre = search.Genre
 	where genre.Active = '1';
 
-	select
-		movie.[Id],
-		movie.[Name],
-		movie.[Description],
-		movie.[YearReleased],
-		movie.[Picture]
-	from [dbo].[Movie] movie
-		join @genreIds genreIds 
-			on movie.GenreId = genreIds.Id
-	where movie.[Name] like (case when @SearchBy is null or @SearchBy = '' then movie.[Name] else '%' + @SearchBy + '%' end)
-	order by movie.[Id]
-	offset ((@page - 1) * @offset) rows
-	fetch next @offset rows only;
-
+	if exists (select 1 from @genreIdsSelected)
+	begin
+		select
+			movie.[Id],
+			movie.[Name],
+			movie.[Description],	
+			movie.[YearReleased],
+			movie.[Picture]
+		from [dbo].[Movie] movie
+			join @genreIdsSelected genreIds 
+				on movie.GenreId = genreIds.Id
+		where movie.[Name] like (case when @SearchBy is null or @SearchBy = '' then movie.[Name] else '%' + @SearchBy + '%' end)
+		order by movie.[Id]
+		offset ((@page - 1) * @offset) rows
+		fetch next @offset rows only;
+	end
+	else
+	begin
+		select
+			movie.[Id],
+			movie.[Name],
+			movie.[Description],	
+			movie.[YearReleased],
+			movie.[Picture]
+		from [dbo].[Movie] movie		
+		where movie.[Name] like (case when @SearchBy is null or @SearchBy = '' then movie.[Name] else '%' + @SearchBy + '%' end)
+		order by movie.[Id]
+		offset ((@page - 1) * @offset) rows
+		fetch next @offset rows only;
+	end
+	
 end
