@@ -41,13 +41,13 @@ namespace Movies.Infrastructure.Repository
                 if (!string.IsNullOrEmpty(searchBy))
                 {
                     param.Add("@SearchBy", searchBy);
-                }
+                }               
 
                 param.Add("@SearchGenres", dt.AsTableValuedParameter("dbo.SearchByGenre"));
-                param.Add("@page", page);
-                param.Add("@offset", offset);
+                param.Add("@Page", page);
+                param.Add("@Offset", offset);
 
-                return (await conn.QueryAsync<GetMovieByParam>("dbo.GetMoviesByParams", param)).ToList();
+                return (await conn.QueryAsync<GetMovieByParam>("dbo.GetMoviesByParams", param, commandType: CommandType.StoredProcedure)).ToList();
             }
         }
     }

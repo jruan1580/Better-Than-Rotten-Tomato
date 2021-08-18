@@ -21,6 +21,7 @@ namespace Movies.Domain.Services
         public MovieService(IMapper mapper, IMoviesRepository movieRepo)
         {
             _mapper = mapper;
+            _moviesRepo = movieRepo;
         }
 
         public async Task<List<Movie>> GetMoviesBySearchAndGenre(List<string> genres, int page, int offset, string search = null)
