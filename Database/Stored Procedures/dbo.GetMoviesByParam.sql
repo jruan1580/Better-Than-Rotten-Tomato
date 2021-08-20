@@ -10,8 +10,8 @@ create procedure [dbo].[GetMoviesByParams]
 (
 	@SearchBy varchar(500) = null,
 	@SearchGenres dbo.SearchByGenre readonly,
-	@page int,
-	@offset int
+	@Page int,
+	@Offset int
 )
 as
 begin
@@ -37,6 +37,7 @@ begin
 			movie.[Name],
 			movie.[Description],	
 			movie.[YearReleased],
+			movie.[GenreId],
 			movie.[Picture]
 		from [dbo].[Movie] movie
 			join @genreIdsSelected genreIds 
@@ -53,6 +54,7 @@ begin
 			movie.[Name],
 			movie.[Description],	
 			movie.[YearReleased],
+			movie.[GenreId],
 			movie.[Picture]
 		from [dbo].[Movie] movie		
 		where movie.[Name] like (case when @SearchBy is null or @SearchBy = '' then movie.[Name] else '%' + @SearchBy + '%' end)
