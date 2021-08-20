@@ -6,10 +6,10 @@ function NavigationBar(){
     return(
         <Navbar bg="dark" variant="dark">
             <Container>
-            <Navbar.Brand href="#">Better Than Rotten Tomato</Navbar.Brand>
-            <Nav className="me-auto">
-                <Nav.Link href="#">Home</Nav.Link>
-            </Nav>
+                <Navbar.Brand href="#">Better Than Rotten Tomato</Navbar.Brand>
+                <Nav className="me-auto">
+                    <Nav.Link href="#">Home</Nav.Link>
+                </Nav>
             </Container>
         </Navbar>
     );

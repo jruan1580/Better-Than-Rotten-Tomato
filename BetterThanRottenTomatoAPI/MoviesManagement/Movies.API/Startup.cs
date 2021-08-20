@@ -32,6 +32,14 @@ namespace Movies.API
 
             services.AddAutoMapper(typeof(MappingProfile));
 
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
+
+
             services.AddSingleton<IMovieGenresRepository, MovieGenresRepository>();
             services.AddSingleton<IMoviesRepository, MoviesRepository>();
             services.AddScoped<IMovieService, MovieService>();
@@ -45,6 +53,8 @@ namespace Movies.API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("MyPolicy");
 
             app.UseHttpsRedirection();
 

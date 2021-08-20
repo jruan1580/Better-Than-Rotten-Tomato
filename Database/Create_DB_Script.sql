@@ -33,3 +33,25 @@ create type SearchByGenre as table
 (
 	Genre varchar(255)
 );
+
+-- initial data
+
+insert into dbo.MovieGenre
+(
+	Genre	
+)
+values
+('Action'),
+('Comedy'),
+('Drama'),
+('Fantasy'),
+('Horror'),
+('Romance'),
+('Mystery'),
+('Thriller'),
+('Sci-Fi'),
+('Adventure'),
+('Cartoon'),
+('Anime'),
+('Documentary'),
+('Superhero');

@@ -26,7 +26,7 @@ namespace Movies.Infrastructure.Repository
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                return (await connection.QueryAsync<MovieGenre>("GetMovieGenres", commandType: CommandType.StoredProcedure)).ToList();
+                return (await connection.QueryAsync<MovieGenre>("dbo.GetMovieGenres", commandType: CommandType.StoredProcedure)).ToList();
             }
         }
     }
