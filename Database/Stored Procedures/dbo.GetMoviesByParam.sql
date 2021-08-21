@@ -10,8 +10,8 @@ create procedure [dbo].[GetMoviesByParams]
 (
 	@SearchBy varchar(500) = null,
 	@SearchGenres dbo.SearchByGenre readonly,
-	@page int,
-	@offset int
+	@Page int,
+	@Offset int
 )
 as
 begin
@@ -30,6 +30,8 @@ begin
 			on genre.Genre = search.Genre
 	where genre.Active = '1';
 
+	declare @total int = (select count(*) from dbo.Movie);
+	
 	if exists (select 1 from @genreIdsSelected)
 	begin
 		select
@@ -37,7 +39,9 @@ begin
 			movie.[Name],
 			movie.[Description],	
 			movie.[YearReleased],
-			movie.[Picture]
+			movie.[GenreId],
+			movie.[Picture],
+			@total as Total
 		from [dbo].[Movie] movie
 			join @genreIdsSelected genreIds 
 				on movie.GenreId = genreIds.Id
@@ -53,7 +57,9 @@ begin
 			movie.[Name],
 			movie.[Description],	
 			movie.[YearReleased],
-			movie.[Picture]
+			movie.[GenreId],
+			movie.[Picture],
+			@total as Total
 		from [dbo].[Movie] movie		
 		where movie.[Name] like (case when @SearchBy is null or @SearchBy = '' then movie.[Name] else '%' + @SearchBy + '%' end)
 		order by movie.[Id]

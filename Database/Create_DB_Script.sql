@@ -12,14 +12,14 @@ use BetterThanRottenTomato;
 
 create table MovieGenre
 (
-	Id int not null primary key identity(0, 1),
+	Id int not null primary key identity(1, 1),
 	Genre varchar(255) not null,
 	Active bit not null default ('1')
 );
 
 create table Movie
 (
-	Id bigint not null primary key identity(0, 1),
+	Id bigint not null primary key identity(1, 1),
 	[Name] varchar(500) not null,
 	[Description] varchar(max) not null,
 	YearReleased int not null,
@@ -33,3 +33,25 @@ create type SearchByGenre as table
 (
 	Genre varchar(255)
 );
+
+-- initial data
+
+insert into dbo.MovieGenre
+(
+	Genre	
+)
+values
+('Action'),
+('Comedy'),
+('Drama'),
+('Fantasy'),
+('Horror'),
+('Romance'),
+('Mystery'),
+('Thriller'),
+('Sci-Fi'),
+('Adventure'),
+('Cartoon'),
+('Anime'),
+('Documentary'),
+('Superhero');
