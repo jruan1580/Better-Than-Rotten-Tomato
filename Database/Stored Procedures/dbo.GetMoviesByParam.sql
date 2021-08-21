@@ -30,6 +30,8 @@ begin
 			on genre.Genre = search.Genre
 	where genre.Active = '1';
 
+	declare @total int = (select count(*) from dbo.Movie);
+	
 	if exists (select 1 from @genreIdsSelected)
 	begin
 		select
@@ -38,7 +40,8 @@ begin
 			movie.[Description],	
 			movie.[YearReleased],
 			movie.[GenreId],
-			movie.[Picture]
+			movie.[Picture],
+			@total as Total
 		from [dbo].[Movie] movie
 			join @genreIdsSelected genreIds 
 				on movie.GenreId = genreIds.Id
@@ -55,7 +58,8 @@ begin
 			movie.[Description],	
 			movie.[YearReleased],
 			movie.[GenreId],
-			movie.[Picture]
+			movie.[Picture],
+			@total as Total
 		from [dbo].[Movie] movie		
 		where movie.[Name] like (case when @SearchBy is null or @SearchBy = '' then movie.[Name] else '%' + @SearchBy + '%' end)
 		order by movie.[Id]
