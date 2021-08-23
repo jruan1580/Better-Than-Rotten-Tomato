@@ -8,7 +8,7 @@ create database BetterThanRottenTomato;
 
 use BetterThanRottenTomato;
 
---- craete tables
+--- create tables
 
 create table MovieGenre
 (
@@ -27,7 +27,14 @@ create table Movie
 	GenreId int foreign key references MovieGenre(Id)
 );
 
---- user define table types
+create table MovieReviews
+(
+	Id bigint not null primary key identity(1,1),
+	MovieId bigint foreign key references Movie(Id),
+	Review int,
+	Comment varchar(max) 
+);
+--- user defined table types
 
 create type SearchByGenre as table
 (
