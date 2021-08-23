@@ -6,12 +6,14 @@ import Pagination from 'react-bootstrap/Pagination';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import AddMovie from './AddMovie';
 import { getMovies } from '../Services/MovieManagementService';
+import Loading from '../Loading/Loading';
 
 function MovieList({categories, search}){
     const [currentPage, setCurrentPage] = useState(1);
     const [moviesByRows, setMoviesByRows] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
     const [showAddModal, setShowAddMovieModal] = useState(false);
+    const [showLoading, setLoadingModal] = useState(true);
 
     const offset = 6;
 
@@ -41,9 +43,10 @@ function MovieList({categories, search}){
                     //close to open, do not regrab
                     if (tmp === false && prevAddModalState.current === true){
                         return;
-                    }
+                    }                    
                 }
                 
+                setLoadingModal(true);
                 var movieResp = await getMovies(categories, search, currentPage, offset); 
                 var currMovieRow = [];
                 var allMoviesByRows = [];
@@ -62,11 +65,14 @@ function MovieList({categories, search}){
                 if (currMovieRow.length > 0){
                     allMoviesByRows.push(currMovieRow);
                 }                
-
+                
                 setTotalRecords(movieResp.totalRecords);
                 setMoviesByRows(allMoviesByRows);
+                setLoadingModal(false);
             }catch(e){
                 alert('Failed to load movie with error: ' + e.message);
+
+                setLoadingModal(false);
             }
         })()
     }, [currentPage, categories, search, showAddModal]);
@@ -77,6 +83,7 @@ function MovieList({categories, search}){
 
     return(
         <>
+            <Loading show={showLoading}/>
             <AddMovie showModal={showAddModal} setModal={setModalState}/>
             <Row>
                 <Col lg="10">
