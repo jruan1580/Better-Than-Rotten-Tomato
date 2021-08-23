@@ -31,7 +31,7 @@ create table MovieReviews
 (
 	Id bigint not null primary key identity(1,1),
 	MovieId bigint foreign key references Movie(Id),
-	Review int,
+	Rating int,
 	Comment varchar(max) 
 );
 --- user defined table types
