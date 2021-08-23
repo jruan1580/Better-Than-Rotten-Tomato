@@ -3,39 +3,48 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 import Pagination from 'react-bootstrap/Pagination';
-import { Fragment, useEffect, useState } from 'react';
-
-async function getMovies(categories, search, page, offset){
-    var baseUrl = process.env.REACT_APP_MOVIES_MANAGEMENT_BASE_URL;
-    var data = { genres: categories, search, page, offset };
-
-    var response = await fetch(baseUrl + '/movies/get/param',{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data) // body data type must match "Content-Type" header
-    });
-
-    if (response.status !== 200){
-        throw new Error('Failed to fetch movies');
-    }
-
-    return await response.json();
-}
+import { Fragment, useEffect, useRef, useState } from 'react';
+import AddMovie from './AddMovie';
+import { getMovies } from '../Services/MovieManagementService';
 
 function MovieList({categories, search}){
     const [currentPage, setCurrentPage] = useState(1);
     const [moviesByRows, setMoviesByRows] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0);
+    const [showAddModal, setShowAddMovieModal] = useState(false);
 
     const offset = 6;
 
-    //only grab movies when currentPage changes
+    const prevCategories = useRef();
+    const prevSearch = useRef();
+    const prevAddModalState = useRef();
+
     useEffect(() =>{
         (async function(){
             try{
-                var movieResp = await getMovies(categories, search, currentPage, offset);                
+                //regrabbing because categories changed, if that is the case, reset page to 1
+                if (prevCategories.current !== categories){
+                    prevCategories.current = categories;
+                    setCurrentPage(1);
+                }
+
+                //regrabbing because search changed, if that is the case, reset page to 1
+                if (prevSearch.current !== search){
+                    prevSearch.current = search;
+                    setCurrentPage(1);
+                }
+
+                //regrabbing because add modal state change, if that is the case, only grab if its state change from open to close
+                if (prevAddModalState.current !== showAddModal){
+                    let tmp = prevAddModalState.current;
+                    prevAddModalState.current = showAddModal;
+                    //close to open, do not regrab
+                    if (tmp === false && prevAddModalState.current === true){
+                        return;
+                    }
+                }
+                
+                var movieResp = await getMovies(categories, search, currentPage, offset); 
                 var currMovieRow = [];
                 var allMoviesByRows = [];
 
@@ -57,19 +66,24 @@ function MovieList({categories, search}){
                 setTotalRecords(movieResp.totalRecords);
                 setMoviesByRows(allMoviesByRows);
             }catch(e){
-                console.log(e.message);
+                alert('Failed to load movie with error: ' + e.message);
             }
         })()
-    }, [currentPage, categories, search]);
+    }, [currentPage, categories, search, showAddModal]);
+
+    const setModalState = (state) =>{
+        setShowAddMovieModal(state);
+    };
 
     return(
         <>
+            <AddMovie showModal={showAddModal} setModal={setModalState}/>
             <Row>
                 <Col lg="10">
                     <h1>Movies</h1>
                 </Col>
                 <Col lg="2">
-                    <Button variant="dark">Add Movie</Button>
+                    <Button variant="dark" onClick={ ()=> setModalState(true) }>Add Movie</Button>
                 </Col>
             </Row><br/>
             {               

@@ -5,6 +5,7 @@ import MovieList from "./MovieList";
 import SideBar from "./SideBar";
 
 function Home(){
+    
     const [categories, setCategories] = useState([]);
     const [search, setSearch] = useState(null);
 
