@@ -1,29 +1,30 @@
 
 -- =============================================
--- Author:		Anakaren Rojas
--- Create date: 08/22/2021
--- Description: Procedure to pull a single movie from from database based on ID provided 
+-- AUTHOR:		ANAKAREN ROJAS
+-- CREATE DATE: 08/22/2021
+-- DESCRIPTION: PROCEDURE TO PULL A SINGLE MOVIE FROM FROM DATABASE BASED ON ID PROVIDED 
 -- =============================================
-USE BetterThanRottenTomato;
+USE BETTERTHANROTTENTOMATO;
 
-if exists(SELECT 1 FROM sysobjects WHERE id = object_id(N'[dbo].[GetMovieById]') and OBJECTPROPERTY(id, N'IsProcedure') = 1 )
-begin
-	drop procedure [dbo].[GetMovieById];
-end
-go
+IF EXISTS(SELECT 1 FROM SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[GETMOVIEBYID]') AND OBJECTPROPERTY(ID, N'ISPROCEDURE') = 1 )
+BEGIN
+	DROP PROCEDURE [DBO].[GETMOVIEBYID];
+END
+GO
 
-CREATE PROCEDURE [dbo].[GetMovieById] 
-	-- Add the parameters for the stored procedure here
-	@Id bigint
+CREATE PROCEDURE [DBO].[GETMOVIEBYID] 
+	-- ADD THE PARAMETERS FOR THE STORED PROCEDURE HERE
+	@ID BIGINT
 AS
 BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
+	-- SET NOCOUNT ON ADDED TO PREVENT EXTRA RESULT SETS FROM
+	-- INTERFERING WITH SELECT STATEMENTS.
 	SET NOCOUNT ON;
+	DECLARE @AVERAGERATING INT = (SELECT AVG(MR.RATING) FROM DBO.MOVIEREVIEWS MR WHERE MR.MOVIEID = @ID);
 
-    -- Insert statements for procedure here
-	SELECT TOP 1  * 
-	FROM dbo.Movie m
-	WHERE m.Id = @Id;
+    -- INSERT STATEMENTS FOR PROCEDURE HERE
+	SELECT TOP 1  *, @AVERAGERATING 
+	FROM DBO.MOVIE M
+	WHERE M.ID = @ID;
 END
 GO

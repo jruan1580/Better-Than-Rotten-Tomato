@@ -31,6 +31,7 @@ create table MovieReviews
 (
 	Id bigint not null primary key identity(1,1),
 	MovieId bigint foreign key references Movie(Id),
+	UserName varchar(max),
 	Rating int,
 	Comment varchar(max) 
 );

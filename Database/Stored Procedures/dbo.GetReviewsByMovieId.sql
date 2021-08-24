@@ -1,43 +1,43 @@
 
 -- =============================================
--- Author:		Anakaren Rojas
--- Create date: 08/22/2021
--- Description:	Procedure to pull reviews by Movie Id 
+-- AUTHOR:		ANAKAREN ROJAS
+-- CREATE DATE: 08/22/2021
+-- DESCRIPTION:	PROCEDURE TO PULL REVIEWS BY MOVIE ID 
 -- =============================================
 
-USE BetterThanRottenTomato;
+USE BETTERTHANROTTENTOMATO;
 
-if exists(SELECT 1 FROM sysobjects WHERE id = object_id(N'[dbo].[GetReviewsByMovieId]') and OBJECTPROPERTY(id, N'IsProcedure') = 1 )
-begin
-	drop procedure [dbo].[GetReviewsByMovieId];
-end
-go
+IF EXISTS(SELECT 1 FROM SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[GETREVIEWSBYMOVIEID]') AND OBJECTPROPERTY(ID, N'ISPROCEDURE') = 1 )
+BEGIN
+	DROP PROCEDURE [DBO].[GETREVIEWSBYMOVIEID];
+END
+GO
 
-CREATE PROCEDURE [dbo].[GetReviewsByMovieId] 
-	-- Add the parameters for the stored procedure here
-	@MovieId bigint,
-	@Offset int,
-	@Page int
+CREATE PROCEDURE [DBO].[GETREVIEWSBYMOVIEID] 
+	-- ADD THE PARAMETERS FOR THE STORED PROCEDURE HERE
+	@MOVIEID BIGINT,
+	@OFFSET INT,
+	@PAGE INT
 AS
 BEGIN
-	-- SET NOCOUNT ON added to prevent extra result sets from
-	-- interfering with SELECT statements.
+	-- SET NOCOUNT ON ADDED TO PREVENT EXTRA RESULT SETS FROM
+	-- INTERFERING WITH SELECT STATEMENTS.
 	SET NOCOUNT ON;
 
-	DECLARE @Total int = (select count(*) from dbo.MovieReviews where MovieId = @MovieId); 
+	DECLARE @TOTAL INT = (SELECT COUNT(*) FROM DBO.MOVIEREVIEWS WHERE MOVIEID = @MOVIEID); 
 
-    -- Insert statements for procedure here
+    -- INSERT STATEMENTS FOR PROCEDURE HERE
 	SELECT 
-	mr.Id,
-	mr.Comment,
-	mr.Rating,
-	mr.MovieId,
-	@Total
+	MR.ID,
+	MR.COMMENT,
+	MR.RATING,
+	MR.MOVIEID,
+	@TOTAL
 
-	FROM dbo.MovieReviews mr
-	WHERE mr.MovieId = @MovieId
-	order by mr.Id
-	offset ((@Page - 1) * @offset) rows
-	fetch next @offset rows only;
+	FROM DBO.MOVIEREVIEWS MR
+	WHERE MR.MOVIEID = @MOVIEID
+	ORDER BY MR.ID
+	OFFSET ((@PAGE - 1) * @OFFSET) ROWS
+	FETCH NEXT @OFFSET ROWS ONLY;
 END
 GO
