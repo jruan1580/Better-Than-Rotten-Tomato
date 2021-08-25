@@ -3,8 +3,10 @@ If(DB_ID(N'BetterThanRottenTomato') is not null)
 begin
 	drop database BetterThanRottenTomato;
 end;
+go
 
 create database BetterThanRottenTomato;
+go
 
 use BetterThanRottenTomato;
 
