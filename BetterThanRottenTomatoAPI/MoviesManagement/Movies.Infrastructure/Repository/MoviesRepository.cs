@@ -13,8 +13,10 @@ namespace Movies.Infrastructure.Repository
     public interface IMoviesRepository
     {
         Task<List<GetMovieByParam>> GetMovieByParameters(List<string> genres, int page, int offset, string searchBy = null);
-    }
 
+        Task AddMovie(string name, string description, int yearReleased, int genreId, byte[] picture);
+    }
+   
     public class MoviesRepository : IMoviesRepository
     {
         private readonly string _connectionString;
@@ -41,13 +43,29 @@ namespace Movies.Infrastructure.Repository
                 if (!string.IsNullOrEmpty(searchBy))
                 {
                     param.Add("@SearchBy", searchBy);
-                }               
+                }
 
                 param.Add("@SearchGenres", dt.AsTableValuedParameter("dbo.SearchByGenre"));
                 param.Add("@Page", page);
                 param.Add("@Offset", offset);
 
                 return (await conn.QueryAsync<GetMovieByParam>("dbo.GetMoviesByParams", param, commandType: CommandType.StoredProcedure)).ToList();
+            }
+        }
+
+        public async Task AddMovie(string name, string description, int yearReleased, int genreId, byte[] picture)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var param = new DynamicParameters();
+
+                param.Add("@Name", name);
+                param.Add("@Description", description);
+                param.Add("@Year", yearReleased);
+                param.Add("@GenreId", genreId);
+                param.Add("@Pic", picture);
+
+                await connection.ExecuteAsync("dbo.AddMovie", param, commandType: CommandType.StoredProcedure);
             }
         }
     }

@@ -10,10 +10,8 @@
 
         public string Description { get; set; }
 
-        public string YearReleased { get; set; }
+        public int YearReleased { get; set; }
 
         public byte[] Picture { get; set; }
-
-        public int Total { get; set; }
     }
 }

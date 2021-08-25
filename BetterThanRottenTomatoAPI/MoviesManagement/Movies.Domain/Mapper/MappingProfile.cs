@@ -10,8 +10,8 @@ namespace Movies.Domain.Mapper
     {
         public MappingProfile()
         {
-            CreateMap<Movie, GetMovieByParam>();
-            CreateMap<GetMovieByParam, Movie>();
+            CreateMap<MovieWithTotal, GetMovieByParam>();
+            CreateMap<GetMovieByParam, MovieWithTotal>();
 
             CreateMap<MovieGenre, Genres>();
         }

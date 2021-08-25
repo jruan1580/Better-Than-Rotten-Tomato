@@ -2,17 +2,7 @@ import { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-
-async function getGenres(){
-    const baseUrl = process.env.REACT_APP_MOVIES_MANAGEMENT_BASE_URL;
-    const response = await fetch(baseUrl + '/genres');
-    
-    if (response.status !== 200){
-        throw new Error('response is not 200');
-    }
-    
-    return await response.json();
-}
+import { getGenres } from '../Services/MovieManagementService';
 
 function SideBar({ setCategorySelectedCallback, setSearchInput }){
     const [genres, setGenres] = useState([]);
@@ -25,8 +15,8 @@ function SideBar({ setCategorySelectedCallback, setSearchInput }){
 
                 setGenres(genre);
             }
-            catch(e){
-                console.log('error occurred while fetching genres.');
+            catch(e){                
+                alert('Failed to fetch genres with error: ' + e.message);
             }            
         })();            
     }, []);
