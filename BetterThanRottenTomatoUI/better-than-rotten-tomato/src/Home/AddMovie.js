@@ -11,12 +11,12 @@ function validateInputs(name, description, year, pictureFiles){
     let errMsg = '';
     let number = 1;
 
-    if (name === undefined || name == null || name === ''){
+    if (!name){
         errMsg +=  (number + '. Name is undefined\n');
         number++;
     }
 
-    if (description === undefined || description == null || description === ''){
+    if (!description){
         errMsg += (number + '. Description is undefined\n');
         number++;
     }
