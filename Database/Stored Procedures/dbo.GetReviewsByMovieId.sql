@@ -1,43 +1,44 @@
 
 -- =============================================
--- AUTHOR:		ANAKAREN ROJAS
--- CREATE DATE: 08/22/2021
--- DESCRIPTION:	PROCEDURE TO PULL REVIEWS BY MOVIE ID 
+-- author:		anakaren rojas
+-- create date: 08/22/2021
+-- description:	procedure to pull reviews by movie id 
 -- =============================================
 
-USE BETTERTHANROTTENTOMATO;
+use betterthanrottentomato;
 
-IF EXISTS(SELECT 1 FROM SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[GETREVIEWSBYMOVIEID]') AND OBJECTPROPERTY(ID, N'ISPROCEDURE') = 1 )
-BEGIN
-	DROP PROCEDURE [DBO].[GETREVIEWSBYMOVIEID];
-END
-GO
+if exists(select 1 from sysobjects where id = object_id(N'[dbo].[GetReviewsByMovieId]') and objectproperty(id, N'isprocedure') = 1 )
+begin
+	drop procedure [dbo].[GetReviewsByMovieId];
+end
+go
 
-CREATE PROCEDURE [DBO].[GETREVIEWSBYMOVIEID] 
-	-- ADD THE PARAMETERS FOR THE STORED PROCEDURE HERE
-	@MOVIEID BIGINT,
-	@OFFSET INT,
-	@PAGE INT
-AS
-BEGIN
-	-- SET NOCOUNT ON ADDED TO PREVENT EXTRA RESULT SETS FROM
-	-- INTERFERING WITH SELECT STATEMENTS.
-	SET NOCOUNT ON;
+create procedure [dbo].[GetReviewsByMovieId] 
+	-- add the parameters for the stored procedure here
+	@MovieId bigint,
+	@Offset int,
+	@Page int
+as
+begin
+	-- set nocount on added to prevent extra result sets from
+	-- interfering with select statements.
+	set nocount on;
 
-	DECLARE @TOTAL INT = (SELECT COUNT(*) FROM DBO.MOVIEREVIEWS WHERE MOVIEID = @MOVIEID); 
+	declare @Total int = (select count(*) from dbo.moviereviews where movieid = @movieid); 
 
-    -- INSERT STATEMENTS FOR PROCEDURE HERE
-	SELECT 
-	MR.ID,
-	MR.COMMENT,
-	MR.RATING,
-	MR.MOVIEID,
-	@TOTAL
+    -- insert statements for procedure here
+	select 
+	mr.Id,
+	mr.Comment,
+	mr.Rating,
+	mr.MovieId,
+	mr.UserName,
+	@Total
 
-	FROM DBO.MOVIEREVIEWS MR
-	WHERE MR.MOVIEID = @MOVIEID
-	ORDER BY MR.ID
-	OFFSET ((@PAGE - 1) * @OFFSET) ROWS
-	FETCH NEXT @OFFSET ROWS ONLY;
-END
-GO
+	from dbo.MovieReviews mr
+	where mr.MovieId = @MovieId
+	order by mr.Id
+	offset ((@Page - 1) * @Offset) rows
+	fetch next @Offset rows only;
+end
+go

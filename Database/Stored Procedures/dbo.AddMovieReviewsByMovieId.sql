@@ -6,17 +6,18 @@
 -- =============================================
 use betterthanrottentomato;
 
-if exists(select 1 from sysobjects where id = object_id(N'[dbo].[addmoviereviewsbymovieid]') and objectproperty(id, N'isprocedure') = 1 )
+if exists(select 1 from sysobjects where id = object_id(N'[dbo].[AddMovieReviewsByMovieId]') and objectproperty(id, N'isprocedure') = 1 )
 begin
-	drop procedure [dbo].[addmoviereviewsbymovieid];
+	drop procedure [dbo].[AddMovieReviewsByMovieId];
 end
 go
 
-create procedure [dbo].[addmoviereviewsbymovieid] 
+create procedure [dbo].[AddMovieReviewsByMovieId] 
 	-- add the parameters for the stored procedure here
-	@movieid bigint,
-	@comment varchar(max),
-	@rating int
+	@MovieId bigint,
+	@Comment varchar(max),
+	@Rating int,
+	@Username varchar(max)
 as
 begin
 	-- set nocount on added to prevent extra result sets from
@@ -26,15 +27,17 @@ begin
     -- insert statements for procedure here
 	insert into dbo.moviereviews
 	(
-		movieid,
-		rating,
-		comment
+		MovieId,
+		Rating,
+		Comment,
+		UserName
 	)
 	values
 	(
-		@movieid,
-		@rating,
-		@comment
+		@MovieId,
+		@Rating,
+		@Comment,
+		@Username
 	);
 end
 go

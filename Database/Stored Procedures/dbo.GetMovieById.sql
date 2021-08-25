@@ -1,30 +1,30 @@
 
 -- =============================================
--- AUTHOR:		ANAKAREN ROJAS
--- CREATE DATE: 08/22/2021
--- DESCRIPTION: PROCEDURE TO PULL A SINGLE MOVIE FROM FROM DATABASE BASED ON ID PROVIDED 
+-- author:		anakaren rojas
+-- create date: 08/22/2021
+-- description: procedure to pull a single movie from from database based on id provided 
 -- =============================================
-USE BETTERTHANROTTENTOMATO;
+use betterthanrottentomato;
 
-IF EXISTS(SELECT 1 FROM SYSOBJECTS WHERE ID = OBJECT_ID(N'[DBO].[GETMOVIEBYID]') AND OBJECTPROPERTY(ID, N'ISPROCEDURE') = 1 )
-BEGIN
-	DROP PROCEDURE [DBO].[GETMOVIEBYID];
-END
-GO
+if exists(select 1 from sysobjects where id = object_id(N'[dbo].[GetMovieById]') and objectproperty(id, N'isprocedure') = 1 )
+begin
+	drop procedure [dbo].[GetMovieById];
+end
+go
 
-CREATE PROCEDURE [DBO].[GETMOVIEBYID] 
-	-- ADD THE PARAMETERS FOR THE STORED PROCEDURE HERE
-	@ID BIGINT
-AS
-BEGIN
-	-- SET NOCOUNT ON ADDED TO PREVENT EXTRA RESULT SETS FROM
-	-- INTERFERING WITH SELECT STATEMENTS.
-	SET NOCOUNT ON;
-	DECLARE @AVERAGERATING INT = (SELECT AVG(MR.RATING) FROM DBO.MOVIEREVIEWS MR WHERE MR.MOVIEID = @ID);
+create procedure [dbo].[GetMovieById] 
+	-- add the parameters for the stored procedure here
+	@Id bigint
+as
+begin
+	-- set nocount on added to prevent extra result sets from
+	-- interfering with select statements.
+	set nocount on;
+	declare @AverageRating int = (select avg(mr.Rating) from dbo.MovieReviews mr where mr.MovieId = @Id);
 
-    -- INSERT STATEMENTS FOR PROCEDURE HERE
-	SELECT TOP 1  *, @AVERAGERATING 
-	FROM DBO.MOVIE M
-	WHERE M.ID = @ID;
-END
-GO
+    -- insert statements for procedure here
+	select top 1  *, @AverageRating 
+	from dbo.Movie m
+	where m.Id = @Id;
+end
+go
