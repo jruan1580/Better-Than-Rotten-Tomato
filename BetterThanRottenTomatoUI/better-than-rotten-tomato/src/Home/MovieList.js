@@ -3,39 +3,73 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 import Pagination from 'react-bootstrap/Pagination';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useReducer, useRef } from 'react';
+import AddMovie from './AddMovie';
+import { getMovies } from '../Services/MovieManagementService';
+import Loading from '../Loading/Loading';
 
-async function getMovies(categories, search, page, offset){
-    var baseUrl = process.env.REACT_APP_MOVIES_MANAGEMENT_BASE_URL;
-    var data = { genres: categories, search, page, offset };
 
-    var response = await fetch(baseUrl + '/movies/get/param',{
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data) // body data type must match "Content-Type" header
-    });
-
-    if (response.status !== 200){
-        throw new Error('Failed to fetch movies');
+function reducer(state, action){
+    switch(action.type){
+        case 'setCurrentPage':
+            return {...state, currentPage: action.payload};
+        case 'setMoviesByRows':
+            return {...state, moviesByRows: action.payload};
+        case 'setTotalRecords':
+            return {...state, totalRecords: action.payload};
+        case 'setShowAddModal':
+            return {...state, showAddModal: action.payload};
+        case 'setShowLoading':
+            return {...state, showLoading: action.payload};
+        default:
+            throw new Error('action not defined');
     }
-
-    return await response.json();
 }
 
+const defaultState ={
+    currentPage: 1,
+    moviesByRows: [],
+    totalRecords: 0,
+    showAddModal: false,
+    showLoading: true
+};
+
 function MovieList({categories, search}){
-    const [currentPage, setCurrentPage] = useState(1);
-    const [moviesByRows, setMoviesByRows] = useState([]);
-    const [totalRecords, setTotalRecords] = useState(0);
+    const [state, dispatcher] = useReducer(reducer, defaultState);
 
     const offset = 6;
 
-    //only grab movies when currentPage changes
+    const prevCategories = useRef();
+    const prevSearch = useRef();
+    const prevAddModalState = useRef();
+
     useEffect(() =>{
         (async function(){
             try{
-                var movieResp = await getMovies(categories, search, currentPage, offset);                
+                //regrabbing because categories changed, if that is the case, reset page to 1
+                if (prevCategories.current !== categories){
+                    prevCategories.current = categories;
+                    dispatcher({type: 'setCurrentPage', payload: 1});
+                }
+
+                //regrabbing because search changed, if that is the case, reset page to 1
+                if (prevSearch.current !== search){
+                    prevSearch.current = search;
+                    dispatcher({type: 'setCurrentPage', payload: 1});
+                }
+
+                //regrabbing because add modal state change, if that is the case, only grab if its state change from open to close
+                if (prevAddModalState.current !== state.showAddModal){
+                    let tmp = prevAddModalState.current;
+                    prevAddModalState.current = state.showAddModal;
+                    //close to open, do not regrab
+                    if (tmp === false && prevAddModalState.current === true){
+                        return;
+                    }                    
+                }
+                
+                dispatcher({type: 'setShowLoading', payload: true});
+                var movieResp = await getMovies(categories, search, state.currentPage, offset); 
                 var currMovieRow = [];
                 var allMoviesByRows = [];
 
@@ -53,27 +87,36 @@ function MovieList({categories, search}){
                 if (currMovieRow.length > 0){
                     allMoviesByRows.push(currMovieRow);
                 }                
-
-                setTotalRecords(movieResp.totalRecords);
-                setMoviesByRows(allMoviesByRows);
+                
+                dispatcher({type: 'setTotalRecords', payload: movieResp.totalRecords});
+                dispatcher({type: 'setMoviesByRows', payload: allMoviesByRows});
+                dispatcher({type: 'setShowLoading', payload: false});
             }catch(e){
-                console.log(e.message);
+                alert('Failed to load movie with error: ' + e.message);
+
+                dispatcher({type: 'setShowLoading', payload: false});
             }
         })()
-    }, [currentPage, categories, search]);
+    }, [state.currentPage, categories, search, state.showAddModal]);
+
+    const setModalState = (state) =>{
+        dispatcher({type: 'setShowAddModal', payload: state});
+    };
 
     return(
         <>
+            <Loading show={state.showLoading}/>
+            <AddMovie showModal={state.showAddModal} setModal={setModalState}/>
             <Row>
                 <Col lg="10">
                     <h1>Movies</h1>
                 </Col>
                 <Col lg="2">
-                    <Button variant="dark">Add Movie</Button>
+                    <Button variant="dark" onClick={ ()=> setModalState(true) }>Add Movie</Button>
                 </Col>
             </Row><br/>
             {               
-                moviesByRows.map((movieRow, index) => {                    
+                state.moviesByRows.map((movieRow, index) => {                    
                     return (
                         <Fragment key={index+1}>
                             <Row>
@@ -94,10 +137,10 @@ function MovieList({categories, search}){
             }  
             <br/>
             <Pagination>
-                {(currentPage !== 1 && moviesByRows.length > 0) && <Pagination.First onClick={() => setCurrentPage(1)} />}
-                {(currentPage !== 1 && moviesByRows.length > 0) && <Pagination.Prev onClick={() => setCurrentPage(currentPage - 1)} />}
-                {(moviesByRows.length > 0 && currentPage !== ((totalRecords % offset === 0 && totalRecords !== 0) ? parseInt(totalRecords / offset) : (parseInt(totalRecords / offset) + 1))) && <Pagination.Next onClick={() => setCurrentPage(currentPage + 1)}/>}
-                {(moviesByRows.length > 0 && currentPage !== ((totalRecords % offset === 0 && totalRecords !== 0) ? parseInt(totalRecords / offset) : (parseInt(totalRecords / offset) + 1))) &&<Pagination.Last onClick={() => setCurrentPage( ((totalRecords % offset === 0 && totalRecords !== 0) ? parseInt(totalRecords / offset) : (parseInt(totalRecords / offset) + 1)))}/>}
+                {(state.currentPage !== 1 && state.moviesByRows.length > 0) && <Pagination.First onClick={() => dispatcher({type: 'setCurrentPage', payload: 1})} />}
+                {(state.currentPage !== 1 && state.moviesByRows.length > 0) && <Pagination.Prev onClick={() => dispatcher({type: 'setCurrentPage', payload: (state.currentPage - 1)})} />}
+                {(state.moviesByRows.length > 0 && state.currentPage !== ((state.totalRecords % offset === 0 && state.totalRecords !== 0) ? parseInt(state.totalRecords / offset) : (parseInt(state.totalRecords / offset) + 1))) && <Pagination.Next onClick={() => dispatcher({type: 'setCurrentPage', payload: (state.currentPage + 1)}) }/>}
+                {(state.moviesByRows.length > 0 && state.currentPage !== ((state.totalRecords % offset === 0 && state.totalRecords !== 0) ? parseInt(state.totalRecords / offset) : (parseInt(state.totalRecords / offset) + 1))) &&<Pagination.Last onClick={() => dispatcher({type:'setCurrentPage', payload: ((state.totalRecords % offset === 0 && state.totalRecords !== 0) ? parseInt(state.totalRecords / offset) : (parseInt(state.totalRecords / offset) + 1))})}/>}
             </Pagination>
             
         </>
