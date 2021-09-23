@@ -9,6 +9,6 @@ namespace ReviewManagement.Infrastructure.Repositories.Interfaces
     public interface IReviewRepository
     {
         Task AddMovieReviewsByMovieId(Review review);
-        Task<Review> GetMovieReviewsByMovieId(long movieId);
+        Task<List<Review>> GetMovieReviewsByMovieId(long movieId);
     }
 }

@@ -4,6 +4,7 @@ using ReviewManagement.Infrastructure.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Data;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
@@ -17,22 +18,45 @@ namespace ReviewManagement.Infrastructure.Repositories
         {
             _connectionString = config.GetSection("ConnectionString:BetterThanRottenTomato").Value;
         }
-        public Task AddMovieReviewsByMovieId(Review review)
+
+        /// <summary>
+        /// Method to add a movie review by movie id
+        /// </summary>
+        /// <param name="review"></param>
+        /// <returns>Task Complete</returns>
+        public async Task AddMovieReviewsByMovieId(Review review)
         {
-            //pass movieId into repo 
-            using(var connection = new SqlConnection(_connectionString))
+            using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
                 var parameters = new DynamicParameters();
+                parameters.Add("@MovieId",review.MovieId);
+                parameters.Add("@Comment", review.Comment);
+                parameters.Add("@Rating", review.Rating);
+                parameters.Add("@Username", review.Username);
 
-
+                await connection.ExecuteAsync("dbo.AddMovieReviewsByMovieId", parameters, commandType: CommandType.StoredProcedure);
                 connection.Close();
             }
         }
 
-        public Task<Review> GetMovieReviewsByMovieId(long movieId)
+        /// <summary>
+        /// Method to pull all movie reviews based on movie id
+        /// </summary>
+        /// <param name="movieId">Long</param>
+        /// <returns>List of Movie Reviews</returns>
+        public async Task<List<Review>> GetMovieReviewsByMovieId(long movieId)
         {
-            throw new NotImplementedException();
+            using(var connection = new SqlConnection(_connectionString)) 
+            {
+                connection.Open();
+
+                var movieReviews = await connection.QueryAsync<Review>("dbo.GetMovieReviewsByMovieId", movieId, commandType: CommandType.StoredProcedure);
+
+                connection.Close();
+
+                return movieReviews.AsList();
+            }
         }
     }
 }
