@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ReviewManagement.Domain.Services.Interfaces
+namespace ReviewManagement.Domain.Interfaces
 {
     public interface IReviewService
     {

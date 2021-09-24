@@ -1,4 +1,4 @@
-﻿using ReviewManagement.Infrastructure.Entities;
+﻿using ReviewManagement.Infrastructure.Repositories.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,7 +8,7 @@ namespace ReviewManagement.Infrastructure.Repositories.Interfaces
 {
     public interface IReviewRepository
     {
-        Task AddMovieReviewsByMovieId(Review review);
-        Task<List<Review>> GetMovieReviewsByMovieId(long movieId);
+        Task AddMovieReview(ReviewEntity review);
+        Task<List<ReviewEntity>> GetMovieReviewsByMovieId(long movieId);
     }
 }
