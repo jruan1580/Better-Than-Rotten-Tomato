@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ReviewManagement.Infrastructure.Repositories.Entities
+namespace ReviewManagement.Domain.Models
 {
-    public class ReviewEntity
+    public class MovieReviewModel
     {
         public long Id { get; set; }
         public long MovieId { get; set; }
