@@ -24,6 +24,10 @@ namespace ReviewManagement.API.Controllers
         [Route("addreview")]
         public async Task<IActionResult> AddMovieReview([FromBody] MovieReview movieReview)
         {
+            if(movieReview == null)
+            {
+                return StatusCode(400);
+            }
             try
             {
                 MovieReviewModel domainMovieReview = new MovieReviewModel()
@@ -49,6 +53,10 @@ namespace ReviewManagement.API.Controllers
         [Route("{movieId}")]
         public async Task<IActionResult> GetMovieReviews(long movieId)
         {
+            if(movieId <= 0)
+            {
+                return StatusCode(400);
+            }
             try
             {
                 return Ok(await _reviewService.GetMovieReviewsByMovieIdService(movieId));

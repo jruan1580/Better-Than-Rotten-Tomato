@@ -4,6 +4,7 @@ using ReviewManagement.Infrastructure.Repositories.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ReviewManagement.Domain.Mappers;
+using System;
 
 namespace ReviewManagement.Domain.Services
 {
@@ -17,15 +18,28 @@ namespace ReviewManagement.Domain.Services
         }
         public async Task AddMovieReviewService(MovieReviewModel movieReview)
         {
+            if(movieReview == null)
+            {
+                throw new ArgumentException("Movie Review not provided");
+            }
             var dbMovieReview = ReviewMappers.ReviewModelToReviewEntity(movieReview);
             await _reviewRepository.AddMovieReview(dbMovieReview);
         }
 
         public async Task<List<MovieReviewModel>> GetMovieReviewsByMovieIdService(long movieId)
         {
+            if(movieId <= 0)
+            {
+                throw new ArgumentException("Movie Id not found");
+            }
             var movieReviewModelList = new List<MovieReviewModel>();
 
             var dbReviewList = await _reviewRepository.GetMovieReviewsByMovieId(movieId);
+
+            if(dbReviewList == null)
+            {
+                throw new Exception("No reviews found");
+            }
 
             //loop through db list and convert each item into a domain review model
             foreach(var r in dbReviewList)
