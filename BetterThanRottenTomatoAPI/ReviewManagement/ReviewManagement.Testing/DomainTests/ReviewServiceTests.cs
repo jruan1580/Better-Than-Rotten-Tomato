@@ -47,21 +47,21 @@ namespace ReviewManagement.Testing.DomainTests
         [Test]
         public async Task Test_GetMovieReviewsByMovieId_Success()
         {
-            _reviewRepo.Setup(r => r.GetMovieReviewsByMovieId(It.IsAny<long>()))
+            _reviewRepo.Setup(r => r.GetMovieReviewsByMovieId(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<int>()))
                 .ReturnsAsync(new List<ReviewEntity>());
 
             var reviewService = new ReviewService(_reviewRepo.Object);
-            await reviewService.GetMovieReviewsByMovieIdService(1);
+            await reviewService.GetMovieReviewsByMovieIdService(1, 2);
 
-            _reviewRepo.Verify(r => r.GetMovieReviewsByMovieId(It.IsAny<long>()), Times.Once);
+            _reviewRepo.Verify(r => r.GetMovieReviewsByMovieId(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<int>()), Times.Once);
         }
 
         [Test]
         public void Test_GetMovieReviewsByMovieId_Fail_ArgumentException()
         {
             var reviewService = new ReviewService(_reviewRepo.Object);
-            Assert.ThrowsAsync<ArgumentException>(() => reviewService.GetMovieReviewsByMovieIdService(0));
-            _reviewRepo.Verify(r => r.GetMovieReviewsByMovieId(It.IsAny<long>()), Times.Never);
+            Assert.ThrowsAsync<ArgumentException>(() => reviewService.GetMovieReviewsByMovieIdService(0, 1));
+            _reviewRepo.Verify(r => r.GetMovieReviewsByMovieId(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<int>()), Times.Never);
         }
 
     }

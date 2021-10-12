@@ -35,12 +35,16 @@ namespace ReviewManagement.Infrastructure.Repositories
             }
         }
 
-        public async Task<List<ReviewEntity>> GetMovieReviewsByMovieId(long movieId)
+        public async Task<List<ReviewEntity>> GetMovieReviewsByMovieId(long movieId, int page, int offset)
         {
             using(var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                var reviews = await connection.QueryAsync<ReviewEntity>("dbo.GetMovieReviewByMovieId", movieId, commandType:CommandType.StoredProcedure);
+                var parameters = new DynamicParameters();
+                parameters.Add("@MovieId", movieId);
+                parameters.Add("@Offset", offset);
+                parameters.Add("@Page", page);
+                var reviews = await connection.QueryAsync<ReviewEntity>("dbo.GetMovieReviewByMovieId", parameters, commandType:CommandType.StoredProcedure);
 
                 connection.Close();
 

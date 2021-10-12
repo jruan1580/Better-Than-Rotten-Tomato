@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ReviewManagement.API.Models
 {
-    public class MovieReview
+    public class AddMovieReviewRequest
     {
         public long Id { get; set; }
         public long MovieId { get; set; }

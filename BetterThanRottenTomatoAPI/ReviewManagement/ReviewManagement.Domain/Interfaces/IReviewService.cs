@@ -9,6 +9,6 @@ namespace ReviewManagement.Domain.Interfaces
     public interface IReviewService
     {
         Task AddMovieReviewService(MovieReviewModel movieReview);
-        Task<List<MovieReviewModel>>  GetMovieReviewsByMovieIdService(long movieId);
+        Task<List<MovieReviewModel>>  GetMovieReviewsByMovieIdService(long movieId, int page);
     }
 }

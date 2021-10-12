@@ -26,7 +26,7 @@ namespace ReviewManagement.Domain.Services
             await _reviewRepository.AddMovieReview(dbMovieReview);
         }
 
-        public async Task<List<MovieReviewModel>> GetMovieReviewsByMovieIdService(long movieId)
+        public async Task<List<MovieReviewModel>> GetMovieReviewsByMovieIdService(long movieId, int page)
         {
             if(movieId <= 0)
             {
@@ -34,7 +34,7 @@ namespace ReviewManagement.Domain.Services
             }
             var movieReviewModelList = new List<MovieReviewModel>();
 
-            var dbReviewList = await _reviewRepository.GetMovieReviewsByMovieId(movieId);
+            var dbReviewList = await _reviewRepository.GetMovieReviewsByMovieId(movieId, page, 10);
 
             if(dbReviewList == null)
             {

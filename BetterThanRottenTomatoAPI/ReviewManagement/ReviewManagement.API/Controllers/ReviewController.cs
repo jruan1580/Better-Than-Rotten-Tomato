@@ -22,7 +22,7 @@ namespace ReviewManagement.API.Controllers
 
         [HttpPost]
         [Route("addreview")]
-        public async Task<IActionResult> AddMovieReview([FromBody] MovieReview movieReview)
+        public async Task<IActionResult> AddMovieReview([FromBody] AddMovieReviewRequest movieReview)
         {
             if(movieReview == null)
             {
@@ -51,7 +51,7 @@ namespace ReviewManagement.API.Controllers
         }
         [HttpGet]
         [Route("getmoviereviews/{movieId}")]
-        public async Task<IActionResult> GetMovieReviews(long movieId)
+        public async Task<IActionResult> GetMovieReviews(long movieId, [FromBody] int page)
         {
             if(movieId <= 0)
             {
@@ -59,7 +59,9 @@ namespace ReviewManagement.API.Controllers
             }
             try
             {
-                return Ok(await _reviewService.GetMovieReviewsByMovieIdService(movieId));
+                var reviewList = await _reviewService.GetMovieReviewsByMovieIdService(movieId, page);
+
+                return Ok();
             }
             catch(ArgumentException ae)
             {

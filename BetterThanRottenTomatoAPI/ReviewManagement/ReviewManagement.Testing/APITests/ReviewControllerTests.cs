@@ -29,7 +29,7 @@ namespace ReviewManagement.Testing.APITests
             _reviewService.Setup(r => r.AddMovieReviewService(It.IsAny<MovieReviewModel>()))
                 .Returns(Task.CompletedTask);
             var controller = new ReviewController(_reviewService.Object);
-            var response = await controller.AddMovieReview(new MovieReview() 
+            var response = await controller.AddMovieReview(new AddMovieReviewRequest() 
             { 
                 Username = "Username",
                 Rating = 5,
@@ -56,7 +56,7 @@ namespace ReviewManagement.Testing.APITests
             _reviewService.Setup(r => r.AddMovieReviewService(It.IsAny<MovieReviewModel>()))
                 .Throws<Exception>();
             var controller = new ReviewController(_reviewService.Object);
-            var response = await controller.AddMovieReview(new MovieReview()
+            var response = await controller.AddMovieReview(new AddMovieReviewRequest()
             {
                 Username = "Username",
                 Rating = 5,
@@ -71,21 +71,21 @@ namespace ReviewManagement.Testing.APITests
         [Test]
         public async Task Test_GetMovieReviews_Success()
         {
-            _reviewService.Setup(r => r.GetMovieReviewsByMovieIdService(It.IsAny<long>()))
+            _reviewService.Setup(r => r.GetMovieReviewsByMovieIdService(It.IsAny<long>(), It.IsAny<int>()))
                 .ReturnsAsync(new List<MovieReviewModel>());
 
             var controller = new ReviewController(_reviewService.Object);
-            var response = await controller.GetMovieReviews(1);
+            var response = await controller.GetMovieReviews(1, 2);
 
             Assert.NotNull(response);
-            Assert.AreEqual(200, ((OkObjectResult)response).StatusCode);
+            Assert.AreEqual(200, ((OkResult)response).StatusCode);
         }
 
         [Test]
         public async Task Test_GetMovieReviews_Fail_ArgumentException()
         {
             var controller = new ReviewController(_reviewService.Object);
-            var response = await controller.GetMovieReviews(-1);
+            var response = await controller.GetMovieReviews(-1, 0);
 
             Assert.NotNull(response);
             Assert.AreEqual(400, ((StatusCodeResult)response).StatusCode);
@@ -94,11 +94,11 @@ namespace ReviewManagement.Testing.APITests
         [Test]
         public async Task Test_GetMovieReviews_Fail_Exception()
         {
-            _reviewService.Setup(r => r.GetMovieReviewsByMovieIdService(It.IsAny<long>()))
+            _reviewService.Setup(r => r.GetMovieReviewsByMovieIdService(It.IsAny<long>(), It.IsAny<int>()))
                 .Throws<Exception>();
 
             var controller = new ReviewController(_reviewService.Object);
-            var response = await controller.GetMovieReviews(1);
+            var response = await controller.GetMovieReviews(1, 0);
 
             Assert.NotNull(response);
             Assert.AreEqual(500, ((ObjectResult)response).StatusCode);
