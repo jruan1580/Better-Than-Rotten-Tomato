@@ -3,8 +3,6 @@ using ReviewManagement.API.Models;
 using ReviewManagement.Domain.Interfaces;
 using ReviewManagement.Domain.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ReviewManagement.API.Controllers
@@ -51,7 +49,7 @@ namespace ReviewManagement.API.Controllers
         }
         [HttpGet]
         [Route("getmoviereviews/{movieId}")]
-        public async Task<IActionResult> GetMovieReviews(long movieId, [FromBody] int page)
+        public async Task<IActionResult> GetMovieReviews(long movieId, [FromQuery] int page)
         {
             if(movieId <= 0)
             {
@@ -60,8 +58,8 @@ namespace ReviewManagement.API.Controllers
             try
             {
                 var reviewList = await _reviewService.GetMovieReviewsByMovieIdService(movieId, page);
-
-                return Ok();
+                var totalReviews = (reviewList.Count > 0) ? reviewList[0].Total : 0; 
+                return Ok(new {ReviewsList = reviewList, Total = totalReviews });
             }
             catch(ArgumentException ae)
             {

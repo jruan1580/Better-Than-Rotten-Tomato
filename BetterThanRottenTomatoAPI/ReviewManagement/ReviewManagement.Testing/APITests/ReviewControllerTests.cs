@@ -78,7 +78,7 @@ namespace ReviewManagement.Testing.APITests
             var response = await controller.GetMovieReviews(1, 2);
 
             Assert.NotNull(response);
-            Assert.AreEqual(200, ((OkResult)response).StatusCode);
+            Assert.AreEqual(200, ((OkObjectResult)response).StatusCode);
         }
 
         [Test]
