@@ -38,7 +38,7 @@ namespace ReviewManagement.Domain.Services
 
             if(dbReviewList == null)
             {
-                throw new Exception("No reviews found");
+                return movieReviewModelList;
             }
 
             //loop through db list and convert each item into a domain review model

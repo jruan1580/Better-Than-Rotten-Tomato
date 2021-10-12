@@ -50,7 +50,7 @@ namespace ReviewManagement.API.Controllers
             }
         }
         [HttpGet]
-        [Route("{movieId}")]
+        [Route("getmoviereviews/{movieId}")]
         public async Task<IActionResult> GetMovieReviews(long movieId)
         {
             if(movieId <= 0)

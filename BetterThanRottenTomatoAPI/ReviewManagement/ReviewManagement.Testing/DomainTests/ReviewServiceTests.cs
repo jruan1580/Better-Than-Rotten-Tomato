@@ -64,16 +64,5 @@ namespace ReviewManagement.Testing.DomainTests
             _reviewRepo.Verify(r => r.GetMovieReviewsByMovieId(It.IsAny<long>()), Times.Never);
         }
 
-        [Test]
-        public void Test_GetMovieReviewsByMovieId_Fail_Exception()
-        {
-            _reviewRepo.Setup(r => r.GetMovieReviewsByMovieId(It.IsAny<long>()));
-
-            var reviewService = new ReviewService(_reviewRepo.Object);
-            Assert.ThrowsAsync<Exception>(() => reviewService.GetMovieReviewsByMovieIdService(1));
-
-            _reviewRepo.Verify(r => r.GetMovieReviewsByMovieId(It.IsAny<long>()), Times.Once);
-        }
-
     }
 }

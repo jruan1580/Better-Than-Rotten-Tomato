@@ -16,7 +16,7 @@ namespace ReviewManagement.Infrastructure.Repositories
 
         public ReviewRepository(IConfiguration config)
         {
-            _connectionString = config.GetSection("ConnectionString:TomatoDb").Value;
+            _connectionString = config.GetSection("ConnectionStrings:TomatoDb").Value;
         }
         public async Task AddMovieReview(ReviewEntity review)
         {

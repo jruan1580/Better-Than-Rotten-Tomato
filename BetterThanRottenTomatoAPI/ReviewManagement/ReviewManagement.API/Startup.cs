@@ -21,7 +21,13 @@ namespace ReviewManagement.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddCors();
+
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            }));
 
             services.AddSingleton<IReviewRepository, ReviewRepository>();
 
@@ -37,13 +43,10 @@ namespace ReviewManagement.API
             }
 
             app.UseRouting();
-
+            app.UseCors("MyPolicy");
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllers();
             });
         }
     }
