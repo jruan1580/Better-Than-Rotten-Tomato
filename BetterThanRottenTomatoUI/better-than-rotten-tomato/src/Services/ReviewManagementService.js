@@ -1,7 +1,7 @@
-export const getReviews = async (movieId) =>{
+export const getReviews = async (movieId, page) =>{
     const baseUrl = process.env.REACT_APP_REVIEWS_MANAGEMENT_BASE_URL;
 
-    let response = await fetch(baseUrl + '/getmoviereviews/' + movieId);
+    let response = await fetch(baseUrl + '/getmoviereviews/' + movieId + '?page='+ page);
     if (response.status !== 200){
         throw new Error('response is not 200');
     }
