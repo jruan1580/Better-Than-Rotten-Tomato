@@ -1,5 +1,5 @@
 import { addMovieReviews } from '../../Services/ReviewManagementService';
-import React, { Fragment } from 'react';
+import React, { Fragment, Form, Row, Column } from 'react';
 
 //validate form 
 // should return formValid bool
@@ -8,8 +8,17 @@ const validateForm = () => {
 }
 
 //on submit 
-const handleSubmit = () => {
+async function handleSubmit (submitEvent){
+  submitEvent.preventDefault();
 
+  try{
+    await addMovieReviews(submitEvent.target.username.value, submitEvent.target.rating.value, submitEvent.target.comment.value);
+
+  }
+  catch(e)
+  {
+
+  }
 }
 
 export default async function AddNewReviewForm(username, rating, comment) {
