@@ -1,53 +1,63 @@
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 import { addMovieReviews } from '../../Services/ReviewManagementService';
-import React, { Fragment, Form, Row, Column } from 'react';
+import React, { Fragment } from 'react';
+import { useParams } from 'react-router-dom';
+import '../reviewsStyles.css';
 
-//validate form 
+//validate form
 // should return formValid bool
-const validateForm = () => {
+const validateForm = () => {};
 
-}
-
-//on submit 
-async function handleSubmit (submitEvent){
+//on submit
+async function handleSubmit(submitEvent) {
   submitEvent.preventDefault();
 
-  try{
-    await addMovieReviews(submitEvent.target.username.value, submitEvent.target.rating.value, submitEvent.target.comment.value);
-
-  }
-  catch(e)
-  {
-
-  }
+  try {
+    await addMovieReviews(
+      submitEvent.target.movieId.value,
+      submitEvent.target.username.value,
+      submitEvent.target.rating.value,
+      submitEvent.target.comment.value
+    );
+  } catch (e) {}
 }
 
-export default async function AddNewReviewForm(username, rating, comment) {
+export default function AddNewReviewForm() {
   return (
     <>
-      <h3>Add New Review</h3>
-      <Form>
+      <h3>Add new movie review</h3>
+      <form>
         <Row>
-          <Column>
+          <Col>
             <label> Display Name</label>
-            <input type="text" value={username}/>
-          </Column>
-          <Column>
-            <label> Rating </label>
-            <input value={rating}/>
-          </Column>
+            <br />
+            <input type="text" />
+          </Col>
+          <Col>
+            <Row>
+              <label> Rating </label>{' '}
+            </Row>
+            <input />
+          </Col>
         </Row>
         <Row>
-          <Column>
-            <label> Comment </label>
-            <input type="text" value={comment} onChange={validateForm}/>
-          </Column>
+          <Col>
+            <Row>
+              <label>Comment</label>
+            </Row>
+            <input type="text" />
+          </Col>
         </Row>
-        <Row>
-          <Column>
-            <button role="button" type="submit" onSubmit={handleSubmit}>Submit</button>
-          </Column>
+        <Row className="spacing">
+          <Col>
+            <Button variant="dark">
+              Submit
+            </Button>
+          </Col>
         </Row>
-      </Form>
+      </form>
     </>
   );
-};
+}

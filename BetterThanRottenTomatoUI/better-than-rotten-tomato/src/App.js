@@ -13,10 +13,8 @@ function App() {
         <NavigationBar />
         <Container>
           <Switch>
-            <Route path= '/reviews/:id' children={<Reviews />} />
-            <Route path='*'>
-              <Home />
-            </Route>
+            <Route exact path='/' component={Home} />
+            <Route exact path= '/reviews/:id' render={Reviews}/>
           </Switch>
         </Container>
       </Router>
