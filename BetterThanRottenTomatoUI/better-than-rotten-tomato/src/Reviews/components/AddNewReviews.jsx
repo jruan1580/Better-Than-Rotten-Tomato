@@ -8,16 +8,18 @@ class ReviewForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      movieId: 0,
       username: '',
       rating: 0,
       comment: '',
-      invalidForm: true,
-      invalidDisplayName: true,
-      invalidComment: true,
-      invalidRating: true,
+      validForm: false,
+      validDisplayName: false,
+      validComment: false,
+      validRating: false,
+      validFields: false,
     };
 
-    this.validateFields = this.validateFields.bind(this);
+    this.getMovieId();
   }
 
   validateFields = (event) => {
@@ -27,15 +29,21 @@ class ReviewForm extends React.Component {
     switch (name) {
       case 'displayNameInput':
         this.setState({ username: value });
-        this.state.invalidDisplayName = value !== '' ? false : true;
+        if (value !== '') {
+          this.setState({ validDisplayName: true });
+        }
         break;
       case 'ratingInput':
         this.setState({ rating: value });
-        this.state.invalidRating = value > 0 ? false : true;
+        if (value > 0) {
+          this.setState({ validRating: true });
+        }
         break;
       case 'commentInput':
         this.setState({ comment: value });
-        this.state.invalidComment = value !== '' ? false : true;
+        if (value !== '') {
+          this.setState({ validComment: true });
+        }
         break;
     }
 
@@ -43,26 +51,25 @@ class ReviewForm extends React.Component {
   };
 
   validateForm = () => {
-    console.log(`dn ${this.state.invalidDisplayName}`);console.log(`iR ${this.state.invalidRating}`);console.log(`comment ${this.state.invalidComment}`);
-    console.log(`invalidForm ${this.state.invalidForm}`);
-
-    const invalidFields = (this.state.invalidDisplayName && this.state.invalidRating && this.state.invalidComment);
-    console.log(`invalidFields ${this.state.invalidFields}`);
-    this.setState({
-      invalidForm:
-      invalidFields
-    });
-    console.log(`invalidForm ${this.state.invalidForm}`);
+    this.state.validFields =
+      this.state.validDisplayName &&
+      this.state.validRating &&
+      this.state.validComment;
+    this.setState({ validForm: this.state.validFields });
   };
 
-  //on submit
-  submitNewReviewForm(submitEvent) {
+  getMovieId = () => {
+    let urlString = window.location.href;
+    this.state.movieId = parseInt(urlString.slice(31));
+  };
+
+  submitNewReviewForm() {
     try {
       addMovieReviews(
-        submitEvent.target.movieId.value,
-        submitEvent.target.username.value,
-        submitEvent.target.rating.value,
-        submitEvent.target.comment.value
+        this.state.movieId.value,
+        this.state.username.value,
+        this.state.rating.value,
+        this.state.comment.value
       );
     } catch (e) {}
   }
@@ -114,7 +121,8 @@ class ReviewForm extends React.Component {
                 <Button
                   type="submit"
                   className="btn btn-dark mt-3"
-                  disabled={this.state.invalidForm}
+                  disabled={!this.state.validForm}
+                  onSubmit={this.submitNewReviewForm()}
                 >
                   Submit
                 </Button>
