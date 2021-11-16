@@ -63,15 +63,26 @@ class ReviewForm extends React.Component {
     this.state.movieId = parseInt(urlString.slice(31));
   };
 
-  submitNewReviewForm() {
-    try {
-      addMovieReviews(
-        this.state.movieId.value,
-        this.state.username.value,
-        this.state.rating.value,
-        this.state.comment.value
-      );
-    } catch (e) {}
+  submitNewReviewForm = (event) => {
+    event.preventDefault();
+    try{
+      console.log(this.state.movieId);
+    }
+    catch(e){};
+    // (async function () {
+    //   try {
+    //     console.log(this.state.movieId);
+    //     console.log(this.state.username);
+    //     console.log(this.state.rating);
+    //     console.log(this.state.comment);
+    //     addMovieReviews(
+    //       this.state.movieId,
+    //       this.state.username,
+    //       this.state.rating,
+    //       this.state.comment
+    //     );
+    //   } catch (e) {}
+    // })();
   }
 
   render() {
@@ -79,7 +90,7 @@ class ReviewForm extends React.Component {
       <>
         <div className="container">
           <h3>Add new movie review</h3>
-          <form className="border p-4">
+          <form className="border p-4" >
             <Row>
               <Col>
                 <div className="form-group">
@@ -122,7 +133,7 @@ class ReviewForm extends React.Component {
                   type="submit"
                   className="btn btn-dark mt-3"
                   disabled={!this.state.validForm}
-                  onSubmit={this.submitNewReviewForm()}
+                  onSubmit={(event) => this.submitNewReviewForm(event)}
                 >
                   Submit
                 </Button>
