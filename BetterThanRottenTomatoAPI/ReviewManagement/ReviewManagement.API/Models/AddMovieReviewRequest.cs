@@ -7,7 +7,6 @@ namespace ReviewManagement.API.Models
 {
     public class AddMovieReviewRequest
     {
-        public long Id { get; set; }
         public long MovieId { get; set; }
         public string Username { get; set; }
         public int Rating { get; set; }

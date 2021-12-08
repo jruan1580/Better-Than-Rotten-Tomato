@@ -127,7 +127,7 @@ function MovieList({categories, search}){
                                         <div>
                                             { <Image style={{width:'220px', height:'360px'}} src={`data:image/jpeg;base64,${movie.picture}`} rounded/> }
                                         </div>
-                                        <label><Link to={`/reviews/:${movie.id}`}><b>{movie.name}</b></Link></label>
+                                        <label><Link to={`/reviews/${movie.id}`}><b>{movie.name}</b></Link></label>
                                     </Col>
                                 })
                             }                        

@@ -3,6 +3,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { addMovieReviews } from '../../Services/ReviewManagementService';
 import React, { Fragment } from 'react';
+import { useParams } from 'react-router';
 
 class ReviewForm extends React.Component {
   constructor(props) {
@@ -16,10 +17,12 @@ class ReviewForm extends React.Component {
       validDisplayName: false,
       validComment: false,
       validRating: false,
-      validFields: false,
     };
+  }
 
-    this.getMovieId();
+  componentDidMount() {
+    const {id} = this.props;
+    this.setState({movieId: id});
   }
 
   validateFields = (event) => {
@@ -29,68 +32,47 @@ class ReviewForm extends React.Component {
     switch (name) {
       case 'displayNameInput':
         this.setState({ username: value });
-        if (value !== '') {
-          this.setState({ validDisplayName: true });
-        }
+        this.setState({validDisplayName: (value !== '')? true: false}, () => { this.validateForm() });
         break;
       case 'ratingInput':
         this.setState({ rating: value });
-        if (value > 0) {
-          this.setState({ validRating: true });
-        }
+        this.setState({validRating: (value > 0)? true : false}, () => { this.validateForm() });
         break;
       case 'commentInput':
         this.setState({ comment: value });
-        if (value !== '') {
-          this.setState({ validComment: true });
-        }
+        this.setState((prevState) =>{
+          return {...prevState, validComment: (value !== '')? true: false};
+        }, () => { this.validateForm() });
         break;
     }
 
-    this.validateForm();
-  };
+  };  
 
   validateForm = () => {
-    this.state.validFields =
-      this.state.validDisplayName &&
-      this.state.validRating &&
-      this.state.validComment;
-    this.setState({ validForm: this.state.validFields });
+    this.setState({ validForm: (this.state.validDisplayName && this.state.validRating && this.state.validComment)? true: false });
   };
 
-  getMovieId = () => {
-    let urlString = window.location.href;
-    this.state.movieId = parseInt(urlString.slice(31));
-  };
-
-  submitNewReviewForm = (event) => {
+  submitNewReviewForm = async function(event){
     event.preventDefault();
     try{
-      console.log(this.state.movieId);
+      await addMovieReviews(
+          this.state.movieId,
+          this.state.username,
+          this.state.rating,
+          this.state.comment
+        );
+    }catch(e){
+      alert(e);
     }
-    catch(e){};
-    // (async function () {
-    //   try {
-    //     console.log(this.state.movieId);
-    //     console.log(this.state.username);
-    //     console.log(this.state.rating);
-    //     console.log(this.state.comment);
-    //     addMovieReviews(
-    //       this.state.movieId,
-    //       this.state.username,
-    //       this.state.rating,
-    //       this.state.comment
-    //     );
-    //   } catch (e) {}
-    // })();
-  }
+        
+  };
 
   render() {
     return (
       <>
         <div className="container">
           <h3>Add new movie review</h3>
-          <form className="border p-4" >
+          <form className="border p-4">
             <Row>
               <Col>
                 <div className="form-group">
@@ -133,7 +115,7 @@ class ReviewForm extends React.Component {
                   type="submit"
                   className="btn btn-dark mt-3"
                   disabled={!this.state.validForm}
-                  onSubmit={(event) => this.submitNewReviewForm(event)}
+                  onClick={(event) => this.submitNewReviewForm(event)}
                 >
                   Submit
                 </Button>

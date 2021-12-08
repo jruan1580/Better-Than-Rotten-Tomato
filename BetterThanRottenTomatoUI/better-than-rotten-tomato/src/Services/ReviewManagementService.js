@@ -1,7 +1,7 @@
 export const getReviews = async (movieId, page) =>{
     const baseUrl = process.env.REACT_APP_REVIEWS_MANAGEMENT_BASE_URL;
 
-    let response = await fetch(baseUrl + '/getmoviereviews/' + movieId + '?page='+ page);
+    const response = await fetch(baseUrl + '/getmoviereviews/' + movieId + '?page='+ page);
     if (response.status !== 200){
         throw new Error('response is not 200');
     }
@@ -11,17 +11,19 @@ export const getReviews = async (movieId, page) =>{
 
 export const addMovieReviews = async (movieId, username, rating, comment) =>{
     const baseUrl = process.env.REACT_APP_REVIEWS_MANAGEMENT_BASE_URL;
-    let review = {movieId, username, rating, comment};
-    let response = await fetch(baseUrl + '/addreview',{
+    const data = {movieId, username, rating, comment};
+    const response = await fetch(baseUrl + '/addreview',{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(review)
+        body: JSON.stringify(data)
     });
 
     
     if (response.status !== 201){
         throw new Error('Response is not 201 created');
     }    
+
+    return await response.json();
 }

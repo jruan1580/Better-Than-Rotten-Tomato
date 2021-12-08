@@ -15,8 +15,7 @@ namespace ReviewManagement.Domain.Mappers
                 MovieId = reviewEntity.MovieId,
                 Comment = reviewEntity.Comment,
                 Rating = reviewEntity.Rating,
-                Username = reviewEntity.Username,
-                Id = reviewEntity.Id
+                Username = reviewEntity.Username
             };
             return movieReviewModel; 
         }
@@ -25,7 +24,6 @@ namespace ReviewManagement.Domain.Mappers
         {
             ReviewEntity reviewEntity = new ReviewEntity()
             {
-                Id = reviewModel.Id,
                 MovieId = reviewModel.MovieId,
                 Comment = reviewModel.Comment,
                 Rating = reviewModel.Rating,
