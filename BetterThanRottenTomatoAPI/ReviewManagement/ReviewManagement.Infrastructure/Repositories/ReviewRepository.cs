@@ -29,7 +29,7 @@ namespace ReviewManagement.Infrastructure.Repositories
                 parameters.Add("@Rating", review.Rating);
                 parameters.Add("@Comment", review.Comment);
 
-                await connection.ExecuteAsync("dbo.AddMovieReviewByMovieId", parameters, commandType: CommandType.StoredProcedure);
+                await connection.ExecuteAsync("dbo.AddMovieReviewsByMovieId", parameters, commandType: CommandType.StoredProcedure);
 
                 connection.Close();
             }

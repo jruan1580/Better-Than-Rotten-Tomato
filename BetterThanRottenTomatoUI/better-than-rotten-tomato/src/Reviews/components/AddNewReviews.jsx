@@ -51,6 +51,16 @@ class ReviewForm extends React.Component {
   validateForm = () => {
     this.setState({ validForm: (this.state.validDisplayName && this.state.validRating && this.state.validComment)? true: false });
   };
+  
+  resetForm = () => {
+    this.setState({username: ''});
+    this.setState({rating: 0 });
+    this.setState({comment:''});
+    this.setState({validForm: false});
+    this.setState({validDisplayName: false});
+    this.setState({validComment: false});
+    this.setState({validRating: false});
+  }
 
   submitNewReviewForm = async function(event){
     event.preventDefault();
@@ -64,7 +74,7 @@ class ReviewForm extends React.Component {
     }catch(e){
       alert(e);
     }
-        
+    this.resetForm();
   };
 
   render() {
