@@ -11,7 +11,7 @@ export const getReviews = async (movieId, page) =>{
 
 export const addMovieReviews = async (movieId, username, rating, comment) =>{
     const baseUrl = process.env.REACT_APP_REVIEWS_MANAGEMENT_BASE_URL;
-    const data = {movieId, username, rating, comment};
+    const data = {movieId: parseInt(movieId), username, rating: parseInt(rating), comment};
     const response = await fetch(baseUrl + '/addreview',{
         method: 'POST',
         headers: {
@@ -24,6 +24,4 @@ export const addMovieReviews = async (movieId, username, rating, comment) =>{
     if (response.status !== 201){
         throw new Error('Response is not 201 created');
     }    
-
-    return await response.json();
 }

@@ -15,7 +15,8 @@ namespace ReviewManagement.Domain.Mappers
                 MovieId = reviewEntity.MovieId,
                 Comment = reviewEntity.Comment,
                 Rating = reviewEntity.Rating,
-                Username = reviewEntity.Username
+                Username = reviewEntity.Username,
+                Total = reviewEntity.Total
             };
             return movieReviewModel; 
         }
@@ -27,7 +28,8 @@ namespace ReviewManagement.Domain.Mappers
                 MovieId = reviewModel.MovieId,
                 Comment = reviewModel.Comment,
                 Rating = reviewModel.Rating,
-                Username = reviewModel.Username
+                Username = reviewModel.Username,
+                Total = reviewModel.Total
             };
 
             return reviewEntity;

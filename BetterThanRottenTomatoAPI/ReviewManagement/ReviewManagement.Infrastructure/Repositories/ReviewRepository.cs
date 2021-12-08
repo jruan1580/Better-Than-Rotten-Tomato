@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 using ReviewManagement.Infrastructure.Repositories.Entities;
 using ReviewManagement.Infrastructure.Repositories.Interfaces;
