@@ -3,7 +3,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { addMovieReviews } from '../../Services/ReviewManagementService';
 import React, { Fragment } from 'react';
-import { useParams } from 'react-router';
+import StarRating from './StarRating';
 
 class ReviewForm extends React.Component {
   constructor(props) {
@@ -105,6 +105,7 @@ class ReviewForm extends React.Component {
                     value={this.state.rating}
                     onChange={(event) => this.validateFields(event)}
                   />
+                  <StarRating />
                 </div>
               </Col>
             </Row>
