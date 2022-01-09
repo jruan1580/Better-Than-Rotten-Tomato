@@ -44,7 +44,7 @@ namespace ReviewManagement.Infrastructure.Repositories
                 parameters.Add("@MovieId", movieId);
                 parameters.Add("@Offset", offset);
                 parameters.Add("@Page", page);
-                var reviews = await connection.QueryAsync<ReviewEntity>("dbo.GetMovieReviewByMovieId", parameters, commandType:CommandType.StoredProcedure);
+                var reviews = await connection.QueryAsync<ReviewEntity>("dbo.GetReviewsByMovieId", parameters, commandType:CommandType.StoredProcedure);
 
                 connection.Close();
 
