@@ -1,5 +1,6 @@
-import {StarIcon, RatingIcon} from './Icons';
+import {RatingIcon} from './Icons';
 import React, {useState} from 'react';
+import * as Bootstrap from 'react-bootstrap'
 
 const StarRating= () => {
     const [rating, setRating] = useState(0);
@@ -14,10 +15,11 @@ const StarRating= () => {
       setRating(index);
     };
     return(
-      <div className="box flex">
+      <div>
         {[1, 2, 3, 4, 5].map((index) => {
           return (
             <RatingIcon 
+              key={index}
               index={index} 
               rating={rating} 
               hoverRating={hoverRating} 

@@ -80,10 +80,10 @@ class ReviewForm extends React.Component {
   render() {
     return (
       <>
-        <div className="container">
+        <div className="">
           <h3>Add new movie review</h3>
           <form className="border p-4">
-            <Row>
+            <Row className="g-3" xs={6} md={4}>
               <Col>
                 <div className="form-group">
                   <input
@@ -105,11 +105,12 @@ class ReviewForm extends React.Component {
                     value={this.state.rating}
                     onChange={(event) => this.validateFields(event)}
                   />
-                  <StarRating />
+                   <StarRating />
                 </div>
               </Col>
             </Row>
-            <Row className="pt-3">
+            <Row className="pt-3"  xs={6} md={4}>
+              <Col>
               <div className="form-group">
                 <textarea
                   className="form-control"
@@ -119,9 +120,10 @@ class ReviewForm extends React.Component {
                   onChange={(event) => this.validateFields(event)}
                 />
               </div>
+              </Col>
             </Row>
             <Row>
-              <Col>
+              <Col xs={6} md={4}>
                 <Button
                   type="submit"
                   className="btn btn-dark mt-3"

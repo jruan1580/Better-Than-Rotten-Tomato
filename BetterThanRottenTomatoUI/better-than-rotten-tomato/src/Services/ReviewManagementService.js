@@ -2,11 +2,11 @@ export const getReviews = async (movieId, page) =>{
     const baseUrl = process.env.REACT_APP_REVIEWS_MANAGEMENT_BASE_URL;
 
     const response = await fetch(baseUrl + '/getmoviereviews/' + movieId + '?page='+ page);
+    console.log(response);
     if (response.status !== 200){
         throw new Error('response is not 200');
     }
-        
-    return await response.json();
+    return response.json();
 }
 
 export const addMovieReviews = async (movieId, username, rating, comment) =>{

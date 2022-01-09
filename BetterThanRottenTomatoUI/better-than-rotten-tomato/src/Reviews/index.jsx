@@ -1,3 +1,4 @@
+import ExistingReviews from './components/ExistingReviews';
 import MovieSummary from './components/MovieSummary';
 import ReviewForm from './components/AddNewReviews';
 import { useParams } from 'react-router';
@@ -8,6 +9,7 @@ export default function Reviews() {
     <>
       <MovieSummary />
       <ReviewForm id={id} />
+      <ExistingReviews movieId={id} /> 
     </>
   );
 }
