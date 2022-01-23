@@ -49,5 +49,22 @@ namespace ReviewManagement.Domain.Services
 
             return movieReviewModelList;
         }
+
+        public async Task<MovieSummaryModel> GetMovieSummary(long movieId)
+        {
+            if(movieId <=0)
+            {
+                throw new ArgumentException("Movie Id not found");
+            }
+
+            var movieSummaryDb = await _reviewRepository.GetMovieSummary(movieId);
+
+            if(movieSummaryDb == null)
+            {
+                throw new Exception("Movie Summary not found");
+            }
+
+            return ReviewMappers.MovieSummaryEntityToModel(movieSummaryDb);
+        }
     }
 }

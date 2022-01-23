@@ -51,5 +51,19 @@ namespace ReviewManagement.Infrastructure.Repositories
                 return reviews.ToList();
             }
         }
+
+        public async Task<MovieSummaryEntity> GetMovieSummary(long movieId)
+        {
+            using(var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                
+                var movieSummary = await connection.QueryFirstOrDefaultAsync<MovieSummaryEntity>("dbo.GetMovieSummary", movieId, commandType:CommandType.StoredProcedure);
+
+                connection.Close();
+
+                return movieSummary;
+            }
+        }
     }
 }

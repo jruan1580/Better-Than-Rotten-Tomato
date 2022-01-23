@@ -36,5 +36,18 @@ namespace ReviewManagement.Domain.Mappers
 
             return reviewEntity;
         }
+
+        public static MovieSummaryModel MovieSummaryEntityToModel(MovieSummaryEntity summaryEntity)
+        {
+            MovieSummaryModel movieSummaryModel = new MovieSummaryModel()
+            {
+                MovieName = summaryEntity.Name,
+                Description = summaryEntity.Description,
+                AverageRating = summaryEntity.AverageRating,
+                Picture = summaryEntity.Picture
+            };
+
+            return movieSummaryModel;
+        }
     }
 }

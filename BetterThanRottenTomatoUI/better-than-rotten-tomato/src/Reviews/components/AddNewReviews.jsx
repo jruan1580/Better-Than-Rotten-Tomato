@@ -80,8 +80,7 @@ class ReviewForm extends React.Component {
   render() {
     return (
       <>
-        <div className="">
-          <h3>Add new movie review</h3>
+          <h3 className='mt-5'>Add new movie review</h3>
           <form className="border p-4">
             <Row className="g-3" xs={6} md={4}>
               <Col>
@@ -135,7 +134,6 @@ class ReviewForm extends React.Component {
               </Col>
             </Row>
           </form>
-        </div>
       </>
     );
   }

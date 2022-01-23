@@ -7,7 +7,7 @@ export default function Reviews() {
   const {id} = useParams();
   return (
     <>
-      <MovieSummary />
+      <MovieSummary movieId={id} />
       <ReviewForm id={id} />
       <ExistingReviews movieId={id} /> 
     </>

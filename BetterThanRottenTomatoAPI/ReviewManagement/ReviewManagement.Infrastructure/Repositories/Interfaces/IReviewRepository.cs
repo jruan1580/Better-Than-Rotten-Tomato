@@ -10,5 +10,6 @@ namespace ReviewManagement.Infrastructure.Repositories.Interfaces
     {
         Task AddMovieReview(ReviewEntity review);
         Task<List<ReviewEntity>> GetMovieReviewsByMovieId(long movieId, int page, int offset);
+        Task<MovieSummaryEntity> GetMovieSummary(long movieId);
     }
 }

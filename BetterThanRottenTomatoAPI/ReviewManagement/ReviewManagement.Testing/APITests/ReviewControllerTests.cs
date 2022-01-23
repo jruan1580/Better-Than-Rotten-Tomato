@@ -103,5 +103,39 @@ namespace ReviewManagement.Testing.APITests
             Assert.NotNull(response);
             Assert.AreEqual(500, ((ObjectResult)response).StatusCode);
         }
+
+        [Test]
+        public async Task Test_GetMovieSummary_Success() 
+        {
+            _reviewService.Setup(r => r.GetMovieSummary(It.IsAny<long>())).ReturnsAsync(new MovieSummaryModel());
+
+            var controller = new ReviewController(_reviewService.Object);
+            var response = await controller.GetMovieSummary(1);
+
+            Assert.NotNull(response);
+            Assert.AreEqual(200, ((OkObjectResult)response).StatusCode);
+        }
+
+        [Test]
+        public async Task Test_GetMovieSummary_Fail_ArgumentException() 
+        {
+            var controller = new ReviewController(_reviewService.Object);
+            var response = await controller.GetMovieSummary(0);
+
+            Assert.NotNull(response);
+            Assert.AreEqual(400, ((StatusCodeResult)response).StatusCode);
+        }
+
+        [Test]
+        public async Task Test_GetMovieSummary_Fail_Exception()
+        {
+            _reviewService.Setup(r => r.GetMovieSummary(It.IsAny<long>())).Throws<Exception>();
+
+            var controller = new ReviewController(_reviewService.Object);
+            var response = await controller.GetMovieSummary(1);
+
+            Assert.NotNull(response);
+            Assert.AreEqual(500, ((ObjectResult)response).StatusCode);
+        }
     }
 }

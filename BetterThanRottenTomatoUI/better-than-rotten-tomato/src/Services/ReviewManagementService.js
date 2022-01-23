@@ -2,7 +2,6 @@ export const getReviews = async (movieId, page) =>{
     const baseUrl = process.env.REACT_APP_REVIEWS_MANAGEMENT_BASE_URL;
 
     const response = await fetch(baseUrl + '/getmoviereviews/' + movieId + '?page='+ page);
-    console.log(response);
     if (response.status !== 200){
         throw new Error('response is not 200');
     }
@@ -24,4 +23,17 @@ export const addMovieReviews = async (movieId, username, rating, comment) =>{
     if (response.status !== 201){
         throw new Error('Response is not 201 created');
     }    
+}
+
+export const getMovieSummary = async(movieId) => {
+    const baseUrl = process.env.REACT_APP_REVIEWS_MANAGEMENT_BASE_URL;
+    const response = await fetch(baseUrl + '/getmoviesummary/' + movieId);
+    console.log(response);
+    // if(response.status !== 200)
+    // {
+    //     throw new Error(`${response.status} is not 200`);
+    // }
+
+    // return response.json();
+
 }

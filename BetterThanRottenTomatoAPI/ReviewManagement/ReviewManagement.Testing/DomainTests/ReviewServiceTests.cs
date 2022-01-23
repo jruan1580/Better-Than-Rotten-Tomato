@@ -64,5 +64,33 @@ namespace ReviewManagement.Testing.DomainTests
             _reviewRepo.Verify(r => r.GetMovieReviewsByMovieId(It.IsAny<long>(), It.IsAny<int>(), It.IsAny<int>()), Times.Never);
         }
 
+        [Test]
+        public async Task Test_GetMovieSummary_Success()
+        {
+            _reviewRepo.Setup(r => r.GetMovieSummary(It.IsAny<long>())).ReturnsAsync(new MovieSummaryEntity());
+
+            var reviewService = new ReviewService(_reviewRepo.Object);
+            await reviewService.GetMovieSummary(1);
+            _reviewRepo.Verify(r => r.GetMovieSummary(It.IsAny<long>()), Times.Once);
+        }
+
+        [Test]
+        public void Test_GetMovieSummary_Fail_ArgumentException()
+        {
+            var reviewService = new ReviewService(_reviewRepo.Object);
+            Assert.ThrowsAsync<ArgumentException>(() => reviewService.GetMovieSummary(0));
+            _reviewRepo.Verify(r => r.GetMovieSummary(It.IsAny<long>()), Times.Never);
+        }
+
+        [Test]
+        public void Test_GetMovieSummary_Fail_Exception()
+        {
+            _reviewRepo.Setup(r => r.GetMovieSummary(It.IsAny<long>())).Throws<Exception>();
+            var reviewService = new ReviewService(_reviewRepo.Object);
+            Assert.ThrowsAsync<Exception>(() => reviewService.GetMovieSummary(1));
+
+            _reviewRepo.Verify(r => r.GetMovieSummary(It.IsAny<long>()), Times.Once);
+        }
+
     }
 }
