@@ -57,8 +57,9 @@ namespace ReviewManagement.Infrastructure.Repositories
             using(var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
-                
-                var movieSummary = await connection.QueryFirstOrDefaultAsync<MovieSummaryEntity>("dbo.GetMovieSummary", movieId, commandType:CommandType.StoredProcedure);
+                var param = new DynamicParameters();
+                param.Add("@MovieId", movieId);
+                var movieSummary = await connection.QueryFirstOrDefaultAsync<MovieSummaryEntity>("dbo.GetMovieSummary", param, commandType:CommandType.StoredProcedure);
 
                 connection.Close();
 

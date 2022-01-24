@@ -5,16 +5,16 @@ import { getMovieSummary } from '../../Services/ReviewManagementService'
 
 function MovieSummary(movieId){
     const [movieSummary, setMovieSummary] = React.useState({
-        MovieName: 'MovieName',
-        AvgRating: 0,
-        Description: '',
-        Picture: ''
+        movieName: 'MovieName',
+        averageRating: 0,
+        description: '',
+        picture: ''
     });
     
     async function getSummary() {
         try {
           const data = await getMovieSummary(parseInt(movieId.movieId));
-        //   setMovieSummary(data);
+          setMovieSummary(data);
         } catch (e) {
           console.log(e);
         }
@@ -35,12 +35,12 @@ function MovieSummary(movieId){
             <img src="img_girl.jpg" alt="Girl in a jacket" width="500" height="600" />
             </Bootstrap.Col>
             <Bootstrap.Col>
-                <h3>{movieSummary.MovieName}</h3>
+                <h3>{movieSummary.movieName}</h3>
                 <Bootstrap.Row>
-                <h5>Average Rating</h5>
+                <h5>{movieSummary.averageRating}</h5>
                 </Bootstrap.Row>
                 <Bootstrap.Row>
-                <p className='justify'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Magnam pariatur ab, rem rerum nisi repellat saepe perspiciatis fuga, sapiente ut illum facere, accusantium animi laudantium fugit nam tenetur sit dolore?</p>
+                <p className="justify">{movieSummary.description}</p>
                 </Bootstrap.Row>
             </Bootstrap.Col>
         </Bootstrap.Row>
