@@ -2,7 +2,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import { addMovieReviews } from '../../Services/ReviewManagementService';
-import React, { Fragment } from 'react';
+import React from 'react';
 import StarRating from './StarRating';
 
 class ReviewForm extends React.Component {
@@ -18,6 +18,7 @@ class ReviewForm extends React.Component {
       validComment: false,
       validRating: false,
     };
+    this.setRatingValue = this.setRatingValue.bind(this);
   }
 
   componentDidMount() {
@@ -34,10 +35,6 @@ class ReviewForm extends React.Component {
         this.setState({ username: value });
         this.setState({validDisplayName: (value !== '')? true: false}, () => { this.validateForm() });
         break;
-      case 'ratingInput':
-        this.setState({ rating: value });
-        this.setState({validRating: (value > 0)? true : false}, () => { this.validateForm() });
-        break;
       case 'commentInput':
         this.setState({ comment: value });
         this.setState((prevState) =>{
@@ -47,6 +44,12 @@ class ReviewForm extends React.Component {
     }
 
   };  
+
+  setRatingValue = (prop) => {
+    const ratingValue = prop;
+    this.setState({ rating: ratingValue });
+    this.setState({validRating: (ratingValue > 0)? true : false}, () => { this.validateForm() })
+  }
 
   validateForm = () => {
     this.setState({ validForm: (this.state.validDisplayName && this.state.validRating && this.state.validComment)? true: false });
@@ -80,11 +83,11 @@ class ReviewForm extends React.Component {
   render() {
     return (
       <>
-          <h3 className='mt-5'>Add new movie review</h3>
+          <h4 className='mt-5'>Add new movie review</h4>
           <form className="border p-4">
-            <Row className="g-3" xs={6} md={4}>
+            <Row>
               <Col>
-                <div className="form-group">
+                <div className="form-group"  xs={12} sm={12} >
                   <input
                     type="text"
                     className="form-control"
@@ -96,19 +99,12 @@ class ReviewForm extends React.Component {
                 </div>
               </Col>
               <Col>
-                <div className="form-group">
-                  <input
-                    className="form-control"
-                    name="ratingInput"
-                    placeholder="Rating"
-                    value={this.state.rating}
-                    onChange={(event) => this.validateFields(event)}
-                  />
-                   <StarRating />
+                <div className="form-group" xs={12} sm={12}>
+                   <StarRating setRatingValue={this.setRatingValue}/>
                 </div>
               </Col>
             </Row>
-            <Row className="pt-3"  xs={6} md={4}>
+            <Row className="pt-3">
               <Col>
               <div className="form-group">
                 <textarea

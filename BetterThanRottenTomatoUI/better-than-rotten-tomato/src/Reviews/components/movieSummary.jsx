@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { useState } from 'react'
 import * as Bootstrap from 'react-bootstrap'
 import { getMovieSummary } from '../../Services/ReviewManagementService'
+import {StaticStarRating} from './StarRating/index'
 
 function MovieSummary(movieId){
     const [movieSummary, setMovieSummary] = React.useState({
@@ -25,22 +25,17 @@ function MovieSummary(movieId){
       }, []);
     return (
     <>
-    {/* TODO:
-        - Add name, description, picture, average rating
-        - Create method to pull data 
-        - Have average rating display as stars */}
-        <h3>Movie Info </h3> 
-        <Bootstrap.Row>
-            <Bootstrap.Col>
-            <img src="img_girl.jpg" alt="Girl in a jacket" width="500" height="600" />
+        <h3 className='mb-3'>{movieSummary.movieName}</h3> 
+        <Bootstrap.Row className='border p-5'>
+            <Bootstrap.Col sm={4}>
+            { <Bootstrap.Image style={{width:'220px', height:'360px'}} src={`data:image/jpeg;base64,${movieSummary.picture}`} rounded/> }
             </Bootstrap.Col>
-            <Bootstrap.Col>
-                <h3>{movieSummary.movieName}</h3>
+            <Bootstrap.Col xs={12} sm={4} md={8}>
                 <Bootstrap.Row>
-                <h5>{movieSummary.averageRating}</h5>
+                    <StaticStarRating rating={movieSummary.averageRating} />
                 </Bootstrap.Row>
                 <Bootstrap.Row>
-                <p className="justify">{movieSummary.description}</p>
+                    <p className="justify">{movieSummary.description}</p>
                 </Bootstrap.Row>
             </Bootstrap.Col>
         </Bootstrap.Row>

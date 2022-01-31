@@ -1,6 +1,7 @@
 import * as Bootstrap from 'react-bootstrap';
 import { getReviews } from '../../Services/ReviewManagementService';
 import React, { useEffect, useRef, useState } from 'react';
+import { StaticStarRating } from './StarRating/index'
 
 export default function ExistingReviews(movieId) {
   const [movieReviews, setMovieReviews] = useState([]);
@@ -45,7 +46,12 @@ export default function ExistingReviews(movieId) {
   return (
     <>
     <h3 className='mt-5'>Reviews</h3>
-      <Bootstrap.Table className='mt-3' bordered striped>
+      <Bootstrap.Table className='mt-3 border'>
+        <colgroup>
+          <col span="1" style={{width: '20%'}} />
+          <col span="1" style={{width: '50%'}} />
+          <col span="1" style={{width: '20%'}} />
+        </colgroup>
         <thead>
           <tr>
             <th>Name</th>
@@ -58,8 +64,8 @@ export default function ExistingReviews(movieId) {
         return (
           <tr key={movieReview.id}>
               <td>{movieReview.username}</td>
-              <td>{movieReview.comment}</td>
-              <td>{movieReview.rating}</td>
+              <td className='pl-5'>{movieReview.comment}</td>
+              <td><StaticStarRating rating={movieReview.rating} /> </td>
           </tr>
         );
       })}
