@@ -70,5 +70,28 @@ namespace ReviewManagement.API.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
+        [HttpGet]
+        [Route("getmoviesummary/{movieId}")]
+        public async Task<IActionResult> GetMovieSummary(long movieId)
+        {
+            if (movieId <= 0)
+            {
+                return StatusCode(400);
+            }
+            try 
+            {
+                var movieSummary = await _reviewService.GetMovieSummary(movieId);
+                return Ok(movieSummary);
+            }
+            catch (ArgumentException ae)
+            {
+                return StatusCode(400, ae.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
+        }
     }
 }

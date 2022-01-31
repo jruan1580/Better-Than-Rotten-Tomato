@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 using ReviewManagement.Infrastructure.Repositories.Entities;
 using ReviewManagement.Infrastructure.Repositories.Interfaces;
@@ -29,7 +29,7 @@ namespace ReviewManagement.Infrastructure.Repositories
                 parameters.Add("@Rating", review.Rating);
                 parameters.Add("@Comment", review.Comment);
 
-                await connection.ExecuteAsync("dbo.AddMovieReviewByMovieId", parameters, commandType: CommandType.StoredProcedure);
+                await connection.ExecuteAsync("dbo.AddMovieReviewsByMovieId", parameters, commandType: CommandType.StoredProcedure);
 
                 connection.Close();
             }
@@ -44,11 +44,26 @@ namespace ReviewManagement.Infrastructure.Repositories
                 parameters.Add("@MovieId", movieId);
                 parameters.Add("@Offset", offset);
                 parameters.Add("@Page", page);
-                var reviews = await connection.QueryAsync<ReviewEntity>("dbo.GetMovieReviewByMovieId", parameters, commandType:CommandType.StoredProcedure);
+                var reviews = await connection.QueryAsync<ReviewEntity>("dbo.GetReviewsByMovieId", parameters, commandType:CommandType.StoredProcedure);
 
                 connection.Close();
 
                 return reviews.ToList();
+            }
+        }
+
+        public async Task<MovieSummaryEntity> GetMovieSummary(long movieId)
+        {
+            using(var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var param = new DynamicParameters();
+                param.Add("@MovieId", movieId);
+                var movieSummary = await connection.QueryFirstOrDefaultAsync<MovieSummaryEntity>("dbo.GetMovieSummary", param, commandType:CommandType.StoredProcedure);
+
+                connection.Close();
+
+                return movieSummary;
             }
         }
     }

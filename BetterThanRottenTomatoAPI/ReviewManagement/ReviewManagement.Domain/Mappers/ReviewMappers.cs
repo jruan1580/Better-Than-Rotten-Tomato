@@ -12,11 +12,12 @@ namespace ReviewManagement.Domain.Mappers
         {
             MovieReviewModel movieReviewModel = new MovieReviewModel() 
             {
+                Id = reviewEntity.Id,
                 MovieId = reviewEntity.MovieId,
                 Comment = reviewEntity.Comment,
                 Rating = reviewEntity.Rating,
                 Username = reviewEntity.Username,
-                Id = reviewEntity.Id
+                Total = reviewEntity.Total
             };
             return movieReviewModel; 
         }
@@ -29,10 +30,24 @@ namespace ReviewManagement.Domain.Mappers
                 MovieId = reviewModel.MovieId,
                 Comment = reviewModel.Comment,
                 Rating = reviewModel.Rating,
-                Username = reviewModel.Username
+                Username = reviewModel.Username,
+                Total = reviewModel.Total
             };
 
             return reviewEntity;
+        }
+
+        public static MovieSummaryModel MovieSummaryEntityToModel(MovieSummaryEntity summaryEntity)
+        {
+            MovieSummaryModel movieSummaryModel = new MovieSummaryModel()
+            {
+                MovieName = summaryEntity.Name,
+                Description = summaryEntity.Description,
+                AverageRating = summaryEntity.AverageRating,
+                Picture = summaryEntity.Picture
+            };
+
+            return movieSummaryModel;
         }
     }
 }

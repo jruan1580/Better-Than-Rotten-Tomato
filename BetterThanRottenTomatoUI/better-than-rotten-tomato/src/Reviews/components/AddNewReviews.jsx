@@ -1,0 +1,138 @@
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
+import { addMovieReviews } from '../../Services/ReviewManagementService';
+import React from 'react';
+import StarRating from './StarRating';
+
+class ReviewForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      movieId: 0,
+      username: '',
+      rating: 0,
+      comment: '',
+      validForm: false,
+      validDisplayName: false,
+      validComment: false,
+      validRating: false,
+    };
+    this.setRatingValue = this.setRatingValue.bind(this);
+  }
+
+  componentDidMount() {
+    const {id} = this.props;
+    this.setState({movieId: id});
+  }
+
+  validateFields = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    switch (name) {
+      case 'displayNameInput':
+        this.setState({ username: value });
+        this.setState({validDisplayName: (value !== '')? true: false}, () => { this.validateForm() });
+        break;
+      case 'commentInput':
+        this.setState({ comment: value });
+        this.setState((prevState) =>{
+          return {...prevState, validComment: (value !== '')? true: false};
+        }, () => { this.validateForm() });
+        break;
+    }
+
+  };  
+
+  setRatingValue = (prop) => {
+    const ratingValue = prop;
+    this.setState({ rating: ratingValue });
+    this.setState({validRating: (ratingValue > 0)? true : false}, () => { this.validateForm() })
+  }
+
+  validateForm = () => {
+    this.setState({ validForm: (this.state.validDisplayName && this.state.validRating && this.state.validComment)? true: false });
+  };
+  
+  resetForm = () => {
+    this.setState({username: ''});
+    this.setState({rating: 0 });
+    this.setState({comment:''});
+    this.setState({validForm: false});
+    this.setState({validDisplayName: false});
+    this.setState({validComment: false});
+    this.setState({validRating: false});
+  }
+
+  submitNewReviewForm = async function(event){
+    event.preventDefault();
+    try{
+      await addMovieReviews(
+          this.state.movieId,
+          this.state.username,
+          this.state.rating,
+          this.state.comment
+        );
+    }catch(e){
+      alert(e);
+    }
+    this.resetForm();
+  };
+
+  render() {
+    return (
+      <>
+          <h4 className='mt-5'>Add new movie review</h4>
+          <form className="border p-4">
+            <Row>
+              <Col>
+                <div className="form-group"  xs={12} sm={12} >
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="displayNameInput"
+                    placeholder="Display Name"
+                    value={this.state.username}
+                    onChange={(event) => this.validateFields(event)}
+                  />
+                </div>
+              </Col>
+              <Col>
+                <div className="form-group" xs={12} sm={12}>
+                   <StarRating setRatingValue={this.setRatingValue}/>
+                </div>
+              </Col>
+            </Row>
+            <Row className="pt-3">
+              <Col>
+              <div className="form-group">
+                <textarea
+                  className="form-control"
+                  name="commentInput"
+                  placeholder="Comment"
+                  value={this.state.comment}
+                  onChange={(event) => this.validateFields(event)}
+                />
+              </div>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={6} md={4}>
+                <Button
+                  type="submit"
+                  className="btn btn-dark mt-3"
+                  disabled={!this.state.validForm}
+                  onClick={(event) => this.submitNewReviewForm(event)}
+                >
+                  Submit
+                </Button>
+              </Col>
+            </Row>
+          </form>
+      </>
+    );
+  }
+}
+
+export default ReviewForm;

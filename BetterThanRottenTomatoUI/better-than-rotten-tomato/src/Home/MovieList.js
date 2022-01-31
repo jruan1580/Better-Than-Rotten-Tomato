@@ -3,6 +3,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 import Pagination from 'react-bootstrap/Pagination';
+import {Link} from 'react-router-dom';
 import { Fragment, useEffect, useReducer, useRef } from 'react';
 import AddMovie from './AddMovie';
 import { getMovies } from '../Services/MovieManagementService';
@@ -126,7 +127,7 @@ function MovieList({categories, search}){
                                         <div>
                                             { <Image style={{width:'220px', height:'360px'}} src={`data:image/jpeg;base64,${movie.picture}`} rounded/> }
                                         </div>
-                                        <label><b>{movie.name}</b></label>
+                                        <label><Link to={`/reviews/${movie.id}`}><b>{movie.name}</b></Link></label>
                                     </Col>
                                 })
                             }                        
